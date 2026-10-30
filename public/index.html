@@ -797,16 +797,18 @@
       }[m]));
     }
   </script>
-  <script src="/balatro.js"></script>
+  <link rel="stylesheet" href="/FloatingLines.css">
+  <script src="/floatingLines.js"></script>
   <script>
-    if (typeof initBalatroBackground === 'function') {
-      initBalatroBackground({
-        color1: '#DE443B',
-        color2: '#006BB4',
-        color3: '#162325',
-        swirl: 0.25,
-        pixelSize: 1.5,
-        mouseInteraction: true
+    if (typeof initFloatingLines === 'function') {
+      initFloatingLines({
+        linesGradient: ['#e945f5', '#ffffff'],
+        enabledWaves: ['top', 'middle', 'bottom'],
+        lineCount: 10,
+        lineDistance: 6,
+        bendStrength: -0.5,
+        interactive: true,
+        clickSwirl: true
       });
     }
   </script>
