@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/glass.css">
+  <link rel="stylesheet" href="/vendor/lenis.css">
   <style>
     :root {
       --bg: #070a12;
@@ -296,9 +297,6 @@
       border-color: var(--spider-red);
       box-shadow: 0 0 0 3px rgba(222, 68, 59, 0.25);
     }
-    }
-
-    select:focus { border-color: var(--spider-red); }
 
     /* Incidents Grid */
     .incidents-grid {
@@ -545,8 +543,8 @@
 
     <!-- Incidents Container -->
     <div id="incidents-container" class="incidents-grid">
-      <div style="grid-column: 1/-1; text-align: center; padding: 48px; color: var(--text-muted);">
-        Connecting to MongoDB live dispatch feed...
+      <div class="empty-state">
+        <p style="color: var(--text-muted); font-size: 13px;">Connecting to MongoDB live dispatch feed...</p>
       </div>
     </div>
   </main>
@@ -651,8 +649,8 @@
 
         if (items.length === 0) {
           container.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--glass-surface); border-radius: 14px; border: 1px dashed var(--glass-border);">
-              <div style="width:44px; height:44px; border-radius:50%; background:rgba(233,69,245,0.12); border:1px solid rgba(233,69,245,0.25); display:inline-flex; align-items:center; justify-content:center; margin-bottom:12px;"><img src="/logo.png" width="22" height="28" style="opacity:0.85;"></div>
+            <div class="empty-state">
+              <div style="width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.20); display:inline-flex; align-items:center; justify-content:center; margin-bottom:12px;"><img src="/logo.png" width="22" height="28" style="opacity:0.85;"></div>
               <h3 style="margin-bottom: 4px;">No Incidents in Current Filter</h3>
               <p style="font-size: 13px; color: var(--text-muted);">
                 All citizen sectors secure. Change filters or wait for incoming citizen alerts.
@@ -663,6 +661,7 @@
         }
 
         container.innerHTML = items.map(inc => renderIncidentCard(inc)).join('');
+        if (window.SiteMotion) window.SiteMotion.refresh();
       } catch (err) {
         container.innerHTML = `<div style="grid-column:1/-1; color:var(--spider-red); text-align:center;">${err.message}</div>`;
       }
@@ -828,21 +827,11 @@
       }[m]));
     }
   </script>
-  <link rel="stylesheet" href="/FloatingLines.css">
-  <script src="/floatingLines.js"></script>
-  <script>
-    if (typeof initFloatingLines === 'function') {
-      initFloatingLines({
-        linesGradient: ['#e945f5', '#ffffff'],
-        enabledWaves: ['top', 'middle', 'bottom'],
-        lineCount: 10,
-        lineDistance: 6,
-        bendStrength: -0.5,
-        interactive: true,
-        clickSwirl: true
-      });
-    }
-  </script>
+  <script src="/vendor/gsap.min.js"></script>
+  <script src="/vendor/ScrollTrigger.min.js"></script>
+  <script src="/vendor/lenis.min.js"></script>
+  <script src="/predictiveArc.js"></script>
+  <script src="/site-motion.js"></script>
 </body>
 </html>
 

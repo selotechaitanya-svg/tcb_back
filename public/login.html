@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/glass.css">
+  <link rel="stylesheet" href="/vendor/lenis.css">
   <style>
     :root {
       --bg: #090d16;
@@ -500,6 +501,8 @@
         }
         document.getElementById('pass-email').focus();
       }
+
+      if (window.SiteMotion) window.SiteMotion.panel(tab === 'otp' ? viewOtp : viewPass);
     }
 
     // ─── OPTION 1: SIGN IN WITH OTP ─────────────────────────────
@@ -529,6 +532,7 @@
           document.getElementById('otp-sent-email').innerText = email;
           document.getElementById('otp-step-request').style.display = 'none';
           document.getElementById('otp-step-verify').style.display = 'block';
+          if (window.SiteMotion) window.SiteMotion.panel(document.getElementById('otp-step-verify'));
 
           if (data.warning) {
             showToast(data.message || `Notice: ${data.warning}`, 'info');
@@ -598,6 +602,7 @@
     function backToOtpEmail() {
       document.getElementById('otp-step-verify').style.display = 'none';
       document.getElementById('otp-step-request').style.display = 'block';
+      if (window.SiteMotion) window.SiteMotion.panel(document.getElementById('otp-step-request'));
     }
 
     // ─── OPTION 2: SIGN IN WITH PASSWORD ────────────────────────
@@ -645,20 +650,10 @@
       }
     }
   </script>
-  <link rel="stylesheet" href="/FloatingLines.css">
-  <script src="/floatingLines.js"></script>
-  <script>
-    if (typeof initFloatingLines === 'function') {
-      initFloatingLines({
-        linesGradient: ['#e945f5', '#ffffff'],
-        enabledWaves: ['top', 'middle', 'bottom'],
-        lineCount: 10,
-        lineDistance: 6,
-        bendStrength: -0.5,
-        interactive: true,
-        clickSwirl: true
-      });
-    }
-  </script>
+  <script src="/vendor/gsap.min.js"></script>
+  <script src="/vendor/ScrollTrigger.min.js"></script>
+  <script src="/vendor/lenis.min.js"></script>
+  <script src="/predictiveArc.js"></script>
+  <script src="/site-motion.js"></script>
 </body>
 </html>

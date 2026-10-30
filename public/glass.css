@@ -1,88 +1,150 @@
 /* ==========================================================================
-   Spider-Sense White Glassmorphism & Visual Identity System
-   Tailored to float with luminous clarity above the FloatingLines WebGL background.
-   Crisp frosted white glass bars, high specular rims, and bold Spider-Red emblem.
+   Spider-Sense Ultra-Clear White Glass System
+   A single visual language for the citizen portal, hero command room and auth
+   screens. Thin white glass over the Predictive Arc background: low fill,
+   heavy blur, crisp specular edges and restrained shadows.
    ========================================================================== */
 
 :root {
-  --bg: #07090e;
+  --bg: #05070b;
 
-  /* Frosted White Glass Bars & Surfaces - High Specular Sheen */
-  --white-glass-bar: rgba(255, 255, 255, 0.14);
-  --white-glass-bar-border: rgba(255, 255, 255, 0.36);
-  --white-glass-surface: rgba(255, 255, 255, 0.10);
-  --white-glass-surface-hover: rgba(255, 255, 255, 0.18);
-  --white-glass-card: rgba(255, 255, 255, 0.08);
-  --white-glass-border: rgba(255, 255, 255, 0.24);
-  --white-glass-border-hover: rgba(255, 255, 255, 0.48);
-  --white-glass-specular: inset 0 1px 1px rgba(255, 255, 255, 0.65), 0 12px 36px -4px rgba(0, 0, 0, 0.55);
-  --white-glass-blur: blur(28px) saturate(220%);
-  --white-glass-blur-sm: blur(18px) saturate(200%);
+  /* Ultra-clear white glass — 5–11% fill, thin luminous borders */
+  --white-glass-bar: rgba(255, 255, 255, 0.10);
+  --white-glass-bar-border: rgba(255, 255, 255, 0.26);
+  --white-glass-surface: rgba(255, 255, 255, 0.055);
+  --white-glass-surface-hover: rgba(255, 255, 255, 0.095);
+  --white-glass-card: rgba(255, 255, 255, 0.06);
+  --white-glass-border: rgba(255, 255, 255, 0.20);
+  --white-glass-border-hover: rgba(255, 255, 255, 0.34);
+  --white-glass-specular: inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 24px 60px -18px rgba(0, 0, 0, 0.8);
+  --white-glass-blur: blur(28px) saturate(190%);
+  --white-glass-blur-sm: blur(18px) saturate(180%);
 
-  --neon-magenta: #e945f5;
-  --neon-magenta-glow: rgba(233, 69, 245, 0.45);
+  /* Aliases used by empty states and inline styles in the portals */
+  --glass-surface: rgba(255, 255, 255, 0.055);
+  --glass-border: rgba(255, 255, 255, 0.20);
+
   --spider-red: #DE443B;
   --spider-red-hover: #b82d25;
-  --spider-red-glow: rgba(222, 68, 59, 0.55);
+  --spider-red-glow: rgba(222, 68, 59, 0.48);
   --hero-blue: #006BB4;
   --hero-blue-hover: #00548f;
-  --hero-blue-glow: rgba(0, 107, 180, 0.45);
+  --hero-blue-glow: rgba(0, 107, 180, 0.42);
   --hero-violet: #8b5cf6;
-  --hero-violet-glow: rgba(139, 92, 246, 0.45);
+  --hero-violet-glow: rgba(139, 92, 246, 0.42);
   --green: #10b981;
   --gold: #f59e0b;
 
   --text: #ffffff;
-  --text-muted: #cbd5e1;
+  --text-muted: #c7d2e0;
   --text-dim: #94a3b8;
 
+  --glass-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-display: 'Space Grotesk', -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-/* ─── White Glass Header & Navigation Bar ─────────────────────────────── */
+/* Portal-level :root blocks are declared after this file; keep the glass
+   palette authoritative so muted copy stays readable on clear surfaces. */
+:root {
+  --bg: #05070b !important;
+  --text-muted: #c7d2e0 !important;
+  --text-dim: #9aa8bb !important;
+}
+
+/* ─── Base surface & type ──────────────────────────────────────────────── */
+html {
+  scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+  scrollbar-width: thin;
+}
+
+body {
+  background-color: var(--bg) !important;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(222, 68, 59, 0.45);
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.36);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+label {
+  color: var(--text-muted) !important;
+}
+
+/* ─── White glass header & navigation bar ──────────────────────────────── */
 header {
-  background: var(--white-glass-bar) !important;
+  background: rgba(255, 255, 255, 0.085) !important;
   border-bottom: 1px solid var(--white-glass-bar-border) !important;
   backdrop-filter: var(--white-glass-blur) !important;
   -webkit-backdrop-filter: var(--white-glass-blur) !important;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.65) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 12px 36px rgba(0, 0, 0, 0.32) !important;
 }
 
-/* ─── Highly Visible Spider Logo & Illuminated Glass Frame ─────────────── */
+/* ─── Spectral spider emblem frame ─────────────────────────────────────── */
 .brand-logo-frame {
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.16) !important;
-  border: 1px solid rgba(255, 255, 255, 0.45) !important;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.75), 0 0 12px rgba(255, 255, 255, 0.18) !important;
-  backdrop-filter: blur(20px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(200%) !important;
+  background: rgba(255, 255, 255, 0.09) !important;
+  border: 1px solid rgba(255, 255, 255, 0.30) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 0 14px rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: var(--white-glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur-sm) !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease,
+    transform 0.24s var(--glass-ease);
 }
 
 .brand:hover .brand-logo-frame {
-  background: rgba(255, 255, 255, 0.26) !important;
-  border-color: rgba(255, 255, 255, 0.70) !important;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5), inset 0 1px 1px #ffffff, 0 0 20px rgba(222, 68, 59, 0.45) !important;
-  transform: translateY(-1px) scale(1.05);
+  background: rgba(255, 255, 255, 0.16) !important;
+  border-color: rgba(255, 255, 255, 0.52) !important;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45), inset 0 1px 0 #ffffff,
+    0 0 22px rgba(222, 68, 59, 0.38) !important;
+  transform: translateY(-1px);
 }
 
 .brand-logo-frame-large {
   width: 76px;
   height: 76px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.16) !important;
-  border: 1px solid rgba(255, 255, 255, 0.45) !important;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.75), 0 0 20px rgba(255, 255, 255, 0.20) !important;
-  backdrop-filter: blur(24px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+  background: rgba(255, 255, 255, 0.09) !important;
+  border: 1px solid rgba(255, 255, 255, 0.32) !important;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.70), 0 0 24px rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: var(--white-glass-blur) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur) !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -96,8 +158,8 @@ header {
   object-fit: contain;
   display: inline-block;
   vertical-align: middle;
-  filter: drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 12px rgba(222, 68, 59, 0.85)) !important;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
+  filter: drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 12px rgba(222, 68, 59, 0.8)) !important;
+  transition: transform 0.25s var(--glass-ease), filter 0.25s ease;
 }
 
 .brand-logo-frame-large .brand-logo-img {
@@ -107,20 +169,28 @@ header {
 
 .brand-title span:first-child {
   color: #ffffff !important;
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+  text-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
 }
 
 .brand-title span:last-child {
   color: var(--text-dim) !important;
 }
 
-/* ─── White Glass User Identity Pill & Badges ──────────────────────────── */
-.user-pill, .hero-badge {
-  background: rgba(255, 255, 255, 0.14) !important;
-  border: 1px solid rgba(255, 255, 255, 0.36) !important;
+.brand-subtitle,
+.form-desc,
+.auth-footer {
+  color: var(--text-muted) !important;
+}
+
+/* ─── White glass identity pills & badges ──────────────────────────────── */
+.user-pill,
+.hero-badge {
+  background: rgba(255, 255, 255, 0.09) !important;
+  border: 1px solid rgba(255, 255, 255, 0.26) !important;
   backdrop-filter: var(--white-glass-blur-sm) !important;
   -webkit-backdrop-filter: var(--white-glass-blur-sm) !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.50), 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 4px 14px rgba(0, 0, 0, 0.22) !important;
   color: #ffffff !important;
 }
 
@@ -142,44 +212,14 @@ header {
   box-shadow: 0 0 12px var(--spider-red);
 }
 
-/* ─── White Glass Secondary Buttons ────────────────────────────────────── */
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.12) !important;
-  border: 1px solid rgba(255, 255, 255, 0.32) !important;
-  backdrop-filter: var(--white-glass-blur-sm) !important;
-  -webkit-backdrop-filter: var(--white-glass-blur-sm) !important;
-  color: #ffffff !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.45) !important;
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.22) !important;
-  border-color: rgba(255, 255, 255, 0.55) !important;
-  color: #ffffff !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.70), 0 0 16px rgba(255, 255, 255, 0.25) !important;
-  transform: translateY(-1.5px);
-}
-
-/* ─── White Glass Banners & Filter Bars ────────────────────────────────── */
-#hero-notice-banner, #guest-banner, .controls-bar, .filter-bar, .hero-banner {
-  background: var(--white-glass-bar) !important;
+/* ─── Ultra-clear banners, control bars & surfaces ─────────────────────── */
+#hero-notice-banner,
+#guest-banner,
+.controls-bar,
+.filter-bar,
+.hero-banner {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.045)) !important;
   border: 1px solid var(--white-glass-bar-border) !important;
-  backdrop-filter: var(--white-glass-blur) !important;
-  -webkit-backdrop-filter: var(--white-glass-blur) !important;
-  box-shadow: var(--white-glass-specular) !important;
-  border-radius: 18px !important;
-  transition: all 0.24s ease;
-}
-
-#hero-notice-banner:hover, #guest-banner:hover, .controls-bar:hover, .hero-banner:hover {
-  border-color: rgba(255, 255, 255, 0.48) !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.75), 0 16px 44px 0 rgba(0, 0, 0, 0.6) !important;
-}
-
-/* ─── White Glass Cards & Containers ───────────────────────────────────── */
-.card, .auth-card {
-  background: var(--white-glass-card) !important;
-  border: 1px solid var(--white-glass-border) !important;
   backdrop-filter: var(--white-glass-blur) !important;
   -webkit-backdrop-filter: var(--white-glass-blur) !important;
   box-shadow: var(--white-glass-specular) !important;
@@ -187,141 +227,118 @@ header {
   transition: border-color 0.24s ease, box-shadow 0.24s ease;
 }
 
-.card:hover, .auth-card:hover {
-  border-color: var(--white-glass-border-hover) !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.75), 0 20px 50px -8px rgba(0, 0, 0, 0.65) !important;
+#hero-notice-banner:hover,
+#guest-banner:hover,
+.controls-bar:hover,
+.hero-banner:hover {
+  border-color: rgba(255, 255, 255, 0.36) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 28px 64px -20px rgba(0, 0, 0, 0.85) !important;
 }
 
-/* ─── White Glass Incident Cards ───────────────────────────────────────── */
-.incident-card {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+/* ─── Ultra-clear cards ────────────────────────────────────────────────── */
+.card,
+.auth-card {
+  position: relative;
+  background: radial-gradient(120% 90% at 12% -12%, rgba(255, 255, 255, 0.12), transparent 55%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075) 0%, rgba(255, 255, 255, 0.035) 52%, rgba(255, 255, 255, 0.06) 100%) !important;
+  border: 1px solid var(--white-glass-border) !important;
+  border-top-color: rgba(255, 255, 255, 0.32) !important;
   backdrop-filter: var(--white-glass-blur) !important;
   -webkit-backdrop-filter: var(--white-glass-blur) !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.40) !important;
-  border-radius: 16px !important;
-  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: var(--white-glass-specular) !important;
+  border-radius: 22px !important;
+  transition: border-color 0.24s ease, box-shadow 0.24s ease;
+}
+
+.card::before,
+.auth-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.78), transparent);
+  pointer-events: none;
+}
+
+.card:hover,
+.auth-card:hover {
+  border-color: var(--white-glass-border-hover) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68),
+    0 30px 70px -20px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* ─── Ultra-clear incident cards ───────────────────────────────────────── */
+.incident-card {
+  position: relative;
+  background: radial-gradient(130% 100% at 10% -20%, rgba(255, 255, 255, 0.10), transparent 60%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.03) 55%, rgba(255, 255, 255, 0.055)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.19) !important;
+  border-top-color: rgba(255, 255, 255, 0.30) !important;
+  backdrop-filter: blur(26px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(190%) !important;
+  box-shadow: 0 20px 50px -16px rgba(0, 0, 0, 0.72),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42) !important;
+  border-radius: 18px !important;
+  transition: background 0.24s ease, border-color 0.24s ease, box-shadow 0.24s var(--glass-ease),
+    transform 0.24s var(--glass-ease) !important;
+}
+
+.incident-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 14%;
+  right: 14%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.62), transparent);
+  pointer-events: none;
 }
 
 .incident-card:hover {
-  background: rgba(255, 255, 255, 0.14) !important;
-  border-color: rgba(255, 255, 255, 0.48) !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65), 0 18px 46px -6px rgba(0, 0, 0, 0.65), 0 0 24px rgba(255, 255, 255, 0.20) !important;
+  background: radial-gradient(130% 100% at 10% -20%, rgba(255, 255, 255, 0.15), transparent 60%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.05) 55%, rgba(255, 255, 255, 0.08)) !important;
+  border-color: rgba(255, 255, 255, 0.36) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    0 26px 60px -18px rgba(0, 0, 0, 0.85), 0 0 28px rgba(255, 255, 255, 0.08) !important;
   transform: translateY(-2px);
 }
 
-/* ─── Method Selector Tabs in Auth ─────────────────────────────────────── */
-.method-tabs {
-  background: rgba(255, 255, 255, 0.12) !important;
-  border: 1px solid rgba(255, 255, 255, 0.32) !important;
-  backdrop-filter: var(--white-glass-blur-sm) !important;
-  -webkit-backdrop-filter: var(--white-glass-blur-sm) !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45) !important;
-  border-radius: 12px !important;
-  padding: 4px !important;
+.card-title {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  color: #ffffff;
 }
 
-.tab-btn.active {
-  background: rgba(255, 255, 255, 0.24) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.55) !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.30), inset 0 1px 1px #ffffff !important;
+/* ─── Readable glass panels inside cards ───────────────────────────────── */
+.desc-box {
+  color: #e4ebf5 !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  border-left: 2px solid rgba(222, 68, 59, 0.55) !important;
+  backdrop-filter: blur(12px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(160%) !important;
+  border-radius: 10px !important;
 }
 
-/* ─── White Glass Inputs, Search Bars & Textareas ────────────────────────── */
-input, select, textarea, .search-box {
-  background: rgba(255, 255, 255, 0.10) !important;
-  border: 1px solid rgba(255, 255, 255, 0.30) !important;
-  backdrop-filter: var(--white-glass-blur-sm) !important;
-  -webkit-backdrop-filter: var(--white-glass-blur-sm) !important;
-  color: #ffffff !important;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.40) !important;
-  border-radius: 10px;
+.history-drawer {
+  background: rgba(255, 255, 255, 0.045) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  backdrop-filter: blur(18px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(170%) !important;
+  border-radius: 10px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
-input::placeholder, textarea::placeholder {
-  color: rgba(255, 255, 255, 0.55) !important;
+.history-item {
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-input:focus, select:focus, textarea:focus {
-  background: rgba(255, 255, 255, 0.16) !important;
-  border-color: rgba(255, 255, 255, 0.65) !important;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.60) !important;
-  outline: none !important;
+.card-actions {
+  border-top-color: rgba(255, 255, 255, 0.09) !important;
 }
-
-/* ─── White Glass Progress Step Bars ────────────────────────────────────── */
-.step-bars {
-  display: flex !important;
-  gap: 8px !important;
-  margin-bottom: 24px !important;
-}
-
-.step-bar {
-  flex: 1 !important;
-  height: 6px !important;
-  border-radius: 999px !important;
-  background: rgba(255, 255, 255, 0.18) !important;
-  border: 1px solid rgba(255, 255, 255, 0.30) !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
-  transition: all 0.3s ease !important;
-}
-
-.step-bar.active {
-  background: #ffffff !important;
-  box-shadow: 0 0 14px #ffffff, 0 0 24px rgba(222, 68, 59, 0.65) !important;
-  border-color: #ffffff !important;
-}
-
-/* ─── Primary Action Buttons ───────────────────────────────────────────── */
-.btn-primary {
-  background: linear-gradient(135deg, #DE443B 0%, #a8201a 100%) !important;
-  border: 1px solid rgba(255, 120, 110, 0.45) !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45), 0 4px 18px var(--spider-red-glow) !important;
-  color: #ffffff !important;
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, #e84c43 0%, #b82721 100%) !important;
-  border-color: rgba(255, 170, 160, 0.6) !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.60), 0 6px 24px rgba(222, 68, 59, 0.7) !important;
-  transform: translateY(-1.5px);
-}
-
-/* ─── Blue / Indigo Action Buttons ─────────────────────────────────────── */
-.btn-blue {
-  background: linear-gradient(135deg, #1688d9 0%, #006bb4 100%) !important;
-  border: 1px solid rgba(160, 220, 255, 0.45) !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45), 0 4px 18px var(--hero-blue-glow) !important;
-  color: #ffffff !important;
-}
-
-.btn-blue:hover {
-  background: linear-gradient(135deg, #2499ed 0%, #007bc7 100%) !important;
-  border-color: rgba(190, 235, 255, 0.6) !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.60), 0 6px 24px rgba(0, 107, 180, 0.65) !important;
-  transform: translateY(-1.5px);
-}
-
-/* ─── Glass Minimalist Toast ───────────────────────────────────────────── */
-.toast {
-  background: rgba(15, 12, 26, 0.90) !important;
-  border: 1px solid rgba(255, 255, 255, 0.30) !important;
-  backdrop-filter: var(--white-glass-blur) !important;
-  -webkit-backdrop-filter: var(--white-glass-blur) !important;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.40) !important;
-}
-
-.toast-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.toast-dot.success { background: var(--green); box-shadow: 0 0 10px var(--green); }
-.toast-dot.error { background: var(--spider-red); box-shadow: 0 0 10px var(--spider-red); }
-.toast-dot.info { background: #38bdf8; box-shadow: 0 0 10px #38bdf8; }
 
 .meta-tag {
   font-family: var(--font-mono);
@@ -334,4 +351,324 @@ input:focus, select:focus, textarea:focus {
 .meta-tag b {
   color: #ffffff;
   font-weight: 700;
+}
+
+/* ─── Empty states ─────────────────────────────────────────────────────── */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px 28px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px dashed rgba(255, 255, 255, 0.22);
+  border-radius: 18px;
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+}
+
+.empty-state h3,
+.empty-state h4 {
+  color: #ffffff;
+}
+
+.empty-state p {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ─── Ultra-clear white glass buttons ──────────────────────────────────── */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.09) !important;
+  border: 1px solid rgba(255, 255, 255, 0.26) !important;
+  backdrop-filter: var(--white-glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur-sm) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.17) !important;
+  border-color: rgba(255, 255, 255, 0.46) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62), 0 0 18px rgba(255, 255, 255, 0.12) !important;
+  transform: translateY(-1.5px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #e34a40 0%, #a8201a 100%) !important;
+  border: 1px solid rgba(255, 160, 150, 0.48) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.40),
+    0 6px 22px var(--spider-red-glow) !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #f0574d 0%, #bd2a22 100%) !important;
+  border-color: rgba(255, 190, 180, 0.62) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 10px 30px rgba(222, 68, 59, 0.60) !important;
+  transform: translateY(-1.5px);
+}
+
+.btn-blue {
+  background: linear-gradient(135deg, #1688d9 0%, #006bb4 100%) !important;
+  border: 1px solid rgba(160, 220, 255, 0.45) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 6px 22px var(--hero-blue-glow) !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.btn-blue:hover {
+  background: linear-gradient(135deg, #2499ed 0%, #007bc7 100%) !important;
+  border-color: rgba(190, 235, 255, 0.60) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58),
+    0 10px 30px rgba(0, 107, 180, 0.58) !important;
+  transform: translateY(-1.5px);
+}
+
+.btn:focus-visible,
+a:focus-visible,
+button:focus-visible,
+.tab-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 3px;
+}
+
+/* ─── Ultra-clear inputs, search bars & textareas ──────────────────────── */
+input,
+select,
+textarea,
+.search-box {
+  background: rgba(255, 255, 255, 0.055) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  backdrop-filter: var(--white-glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur-sm) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+  border-radius: 10px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.46) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  background: rgba(255, 255, 255, 0.09) !important;
+  border-color: rgba(255, 255, 255, 0.48) !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.40) !important;
+  outline: none !important;
+}
+
+select option {
+  background: #0a0e16;
+  color: #ffffff;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff;
+  -webkit-box-shadow: 0 0 0 1000px #111722 inset !important;
+  caret-color: #ffffff;
+  transition: background-color 9999s ease-out 0s;
+}
+
+.otp-input {
+  letter-spacing: 10px;
+  font-weight: 700;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+/* ─── Auth tabs & registration steps ───────────────────────────────────── */
+.method-tabs {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  backdrop-filter: var(--white-glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur-sm) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.30) !important;
+  border-radius: 12px !important;
+  padding: 4px !important;
+}
+
+.tab-btn {
+  color: rgba(255, 255, 255, 0.62) !important;
+}
+
+.tab-btn.active {
+  background: rgba(255, 255, 255, 0.13) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.30) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+}
+
+.step-bars {
+  display: flex !important;
+  gap: 8px !important;
+  margin-bottom: 24px !important;
+}
+
+.step-bar {
+  flex: 1 !important;
+  height: 5px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+  transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+.step-bar.active {
+  background: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.75),
+    0 0 26px rgba(222, 68, 59, 0.50) !important;
+}
+
+/* ─── Toasts ───────────────────────────────────────────────────────────── */
+.toast {
+  background: rgba(8, 12, 20, 0.58) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.30) !important;
+}
+
+.toast-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.toast-dot.success {
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+}
+
+.toast-dot.error {
+  background: var(--spider-red);
+  box-shadow: 0 0 10px var(--spider-red);
+}
+
+.toast-dot.info {
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8;
+}
+
+/* ─── Hero access overlay ──────────────────────────────────────────────── */
+#denied-overlay {
+  background: rgba(0, 0, 0, 0.52) !important;
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+}
+
+.denied-card {
+  background: radial-gradient(130% 100% at 20% -10%, rgba(255, 255, 255, 0.14), transparent 60%),
+    rgba(255, 255, 255, 0.075) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  backdrop-filter: var(--white-glass-blur) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur) !important;
+  border-radius: 20px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 28px 70px -18px rgba(0, 0, 0, 0.9), 0 0 40px rgba(222, 68, 59, 0.16) !important;
+}
+
+/* ─── Footer ───────────────────────────────────────────────────────────── */
+footer {
+  background: rgba(255, 255, 255, 0.035);
+  border-top: 1px solid rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  color: var(--text-dim) !important;
+}
+
+/* ─── Narrow-viewport polish ───────────────────────────────────────────── */
+@media (max-width: 860px) {
+  header {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 16px !important;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  main {
+    padding: 18px 16px;
+  }
+
+  .incidents-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .card,
+  .auth-card {
+    padding: 22px !important;
+    border-radius: 18px !important;
+  }
+
+  #guest-banner,
+  #hero-notice-banner,
+  .hero-banner,
+  .controls-bar {
+    padding: 18px !important;
+    border-radius: 16px !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .header-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .btn-sm {
+    padding: 7px 10px !important;
+    font-size: 11px !important;
+  }
+
+  .brand-logo-frame {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .brand-title {
+    font-size: 15px !important;
+    line-height: 1.15;
+  }
+
+  .brand-title span:last-child {
+    font-size: 9px !important;
+    letter-spacing: 0.35px !important;
+  }
+
+  .incident-card {
+    padding: 16px !important;
+  }
+}
+
+/* ─── Reduced motion ───────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
