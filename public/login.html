@@ -331,7 +331,9 @@
 <body>
 
   <div class="brand-header">
-    <img src="/logo.png" alt="Spider Logo" class="brand-logo-img" width="64" height="80">
+    <div class="brand-logo-frame-large">
+      <img src="/logo.png" alt="Spider Logo" class="brand-logo-img" width="50" height="60">
+    </div>
     <div class="brand-title">SPIDER-<span>SENSE</span></div>
     <div class="brand-subtitle">New York City Emergency Alert & Hero Dispatch</div>
   </div>
@@ -528,11 +530,15 @@
           document.getElementById('otp-step-request').style.display = 'none';
           document.getElementById('otp-step-verify').style.display = 'block';
 
-          showToast(data.message || '6-digit code sent! Check your inbox.', 'success');
+          if (data.warning) {
+            showToast(data.message || `Notice: ${data.warning}`, 'info');
+          } else {
+            showToast(data.message || '6-digit code sent! Check your inbox.', 'success');
+          }
 
           if (data.devOtp) {
             document.getElementById('otp-code').value = data.devOtp;
-            showToast(`[Dev Console Code]: ${data.devOtp}`, 'info');
+            showToast(`[Verification Code]: ${data.devOtp}`, 'info');
           }
           document.getElementById('otp-code').focus();
         } else if (data.notFound) {

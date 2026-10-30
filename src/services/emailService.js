@@ -145,7 +145,7 @@ const getEmailTemplate = (otp, type = 'login') => {
 };
 
 /**
- * Send OTP Verification Email via Resend API or Gmail SMTP fallback
+ * Send OTP Verification Email via Gmail SMTP or Resend API fallback
  */
 const sendOtpEmail = async (email, otp, type = 'login') => {
   const cleanEmail = email.toLowerCase().trim();
@@ -153,7 +153,41 @@ const sendOtpEmail = async (email, otp, type = 'login') => {
   const textContent = `Your Spider-Sense verification code is: ${otp}\n\nThis code expires in 10 minutes and can only be used once.\nNever share this code with anyone.`;
   const subject = `[Spider-Sense] ${otp} is your verification code`;
 
-  // 1. Try Resend API first if configured
+  const errors = [];
+
+  // 1. Try Gmail SMTP first (Universal: sends to ANY email domain without restriction)
+  if (config.emailUser && config.emailPass) {
+    try {
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: config.emailUser,
+          pass: config.emailPass
+        }
+      });
+
+      const fromAddress = `"Spider-Sense Dispatch" <${config.emailUser}>`;
+      const info = await transporter.sendMail({
+        from: fromAddress,
+        to: cleanEmail,
+        subject,
+        text: textContent,
+        html: htmlContent
+      });
+
+      console.log(`✉️ [Gmail SMTP] Verification email sent to ${cleanEmail} (ID: ${info.messageId})`);
+      return { success: true, provider: 'smtp', id: info.messageId };
+    } catch (smtpErr) {
+      console.warn(`⚠️ [SMTP Notice] SMTP delivery failed to ${cleanEmail}: ${smtpErr.message}`);
+      errors.push(`Gmail SMTP: ${smtpErr.message}`);
+    }
+  } else {
+    errors.push('Gmail SMTP: credentials not configured');
+  }
+
+  // 2. Try Resend API (Secondary/Fallback)
   if (config.resendApiKey && config.resendApiKey.trim() !== '') {
     try {
       if (!ResendClient) {
@@ -179,42 +213,24 @@ const sendOtpEmail = async (email, otp, type = 'login') => {
       return { success: true, provider: 'resend', id: response?.data?.id };
     } catch (resendErr) {
       console.warn(`⚠️ [Resend Notice] Resend delivery failed to ${cleanEmail}: ${resendErr.message}`);
+      errors.push(`Resend: ${resendErr.message}`);
     }
+  } else {
+    errors.push('Resend: API key not configured');
   }
 
-  // 2. Try Gmail SMTP fallback (can send to ANY email address)
-  if (config.emailUser && config.emailPass) {
-    try {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: config.emailUser,
-          pass: config.emailPass
-        }
-      });
-
-      const fromAddress = `"Spider-Sense Dispatch" <${config.emailUser}>`;
-      const info = await transporter.sendMail({
-        from: fromAddress,
-        to: cleanEmail,
-        subject,
-        text: textContent,
-        html: htmlContent
-      });
-
-      console.log(`✉️ [Gmail SMTP] Verification email sent to ${cleanEmail} (ID: ${info.messageId})`);
-      return { success: true, provider: 'smtp', id: info.messageId };
-    } catch (smtpErr) {
-      console.warn(`⚠️ [SMTP Notice] SMTP delivery failed (${smtpErr.message})`);
-    }
-  }
-
-  // 3. Fallback print in development console
+  // 3. Fallback print in console and return transparent diagnostics
   console.log(`\n======================================================`);
-  console.log(`🔑 DEV FALLBACK OTP FOR ${cleanEmail}: >>> [ ${otp} ] <<<`);
+  console.log(`🔑 FALLBACK OTP FOR ${cleanEmail}: >>> [ ${otp} ] <<<`);
+  console.log(`⚠️ REASON: ${errors.join('; ')}`);
   console.log(`======================================================\n`);
 
-  return { success: true, provider: 'console-development', devOtp: otp };
+  return {
+    success: false,
+    error: errors.join('; '),
+    provider: 'failed',
+    devOtp: otp
+  };
 };
 
 module.exports = {

@@ -7,7 +7,7 @@
       "destination": "/admin.html"
     },
     {
-      "source": "/admin/",
+      "source": "/admin/(.*)",
       "destination": "/admin.html"
     },
     {
@@ -15,7 +15,7 @@
       "destination": "/login.html"
     },
     {
-      "source": "/login/",
+      "source": "/login/(.*)",
       "destination": "/login.html"
     },
     {
@@ -23,7 +23,7 @@
       "destination": "/register.html"
     },
     {
-      "source": "/register/",
+      "source": "/register/(.*)",
       "destination": "/register.html"
     },
     {

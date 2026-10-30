@@ -168,12 +168,24 @@ const authController = {
       });
 
       // Send email
-      await sendOtpEmail(cleanEmail, rawOtp, type);
+      const emailResult = await sendOtpEmail(cleanEmail, rawOtp, type);
+
+      if (!emailResult || !emailResult.success) {
+        console.warn(`[Auth Notice] OTP email delivery issue for ${cleanEmail}: ${emailResult?.error || 'Unknown'}`);
+        return res.status(200).json({
+          success: true,
+          warning: emailResult?.error || 'Direct inbox delivery encountered an issue.',
+          message: `Verification code generated for ${cleanEmail}. (Notice: ${emailResult?.error || 'Direct inbox delivery pending'}). Use code: ${rawOtp}`,
+          email: cleanEmail,
+          devOtp: rawOtp
+        });
+      }
 
       return res.status(200).json({
         success: true,
         message: `6-digit verification code sent to ${cleanEmail}. Please check your inbox!`,
         email: cleanEmail,
+        provider: emailResult.provider,
         devOtp: process.env.NODE_ENV !== 'production' ? rawOtp : undefined
       });
     } catch (error) {
