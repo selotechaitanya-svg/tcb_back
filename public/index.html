@@ -4,21 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spider-Sense | NYC Citizen Emergency Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #090d16;
-      --card-bg: #131926;
-      --border: #232c3d;
-      --spider-red: #e63946;
-      --spider-red-glow: rgba(230, 57, 70, 0.4);
-      --hero-blue: #2a9df4;
-      --hero-blue-glow: rgba(42, 157, 244, 0.35);
+      --card-bg: rgba(18, 24, 38, 0.82);
+      --border: rgba(255, 255, 255, 0.10);
+      --border-focus: rgba(222, 68, 59, 0.6);
+      --spider-red: #DE443B;
+      --spider-red-hover: #b82d25;
+      --spider-red-glow: rgba(222, 68, 59, 0.45);
+      --hero-blue: #006BB4;
+      --hero-blue-hover: #00548f;
+      --dark-slate: #162325;
       --green: #2ecc71;
       --gold: #f4a261;
       --purple: #a855f7;
       --text: #f0f6fc;
-      --text-muted: #8b949e;
-      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --text-muted: #94a3b8;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-display: 'Space Grotesk', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,14 +34,15 @@
     body {
       background-color: var(--bg);
       color: var(--text);
-      font-family: var(--font);
+      font-family: var(--font-body);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
 
     header {
-      background: linear-gradient(180deg, rgba(19, 25, 38, 0.98) 0%, rgba(9, 13, 22, 0.95) 100%);
+      background: rgba(14, 19, 30, 0.78);
       border-bottom: 1px solid var(--border);
       padding: 16px 28px;
       display: flex;
@@ -42,7 +51,8 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
     .brand {
@@ -55,12 +65,14 @@
 
     .brand-icon {
       font-size: 28px;
-      filter: drop-shadow(0 0 10px var(--spider-red));
+      filter: drop-shadow(0 0 12px var(--spider-red));
     }
 
     .brand-title {
-      font-size: 18px;
+      font-family: var(--font-display);
+      font-size: 19px;
       font-weight: 800;
+      letter-spacing: -0.01em;
       display: flex;
       flex-direction: column;
     }
@@ -68,13 +80,14 @@
     .brand-title span:first-child {
       color: var(--spider-red);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
     }
 
     .brand-title span:last-child {
       font-size: 11px;
       color: var(--text-muted);
       letter-spacing: 0.5px;
+      font-family: var(--font-body);
     }
 
     .header-actions {
@@ -88,33 +101,89 @@
       align-items: center;
       gap: 8px;
       padding: 6px 14px;
-      background: var(--card-bg);
+      background: rgba(22, 35, 37, 0.65);
       border: 1px solid var(--border);
       border-radius: 999px;
-      font-size: 13px;
-    }
-
-    .btn {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
+      font-family: var(--font-display);
       font-size: 13px;
       font-weight: 600;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Polished, Tactical Non-AI-Slop Buttons */
+    .btn {
+      padding: 10px 18px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.025em;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      gap: 8px;
       text-decoration: none;
-      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      -webkit-user-select: none;
     }
 
-    .btn-sm { padding: 6px 12px; font-size: 12px; }
-    .btn-primary { background: var(--spider-red); color: white; box-shadow: 0 2px 8px var(--spider-red-glow); }
-    .btn-primary:hover { background: #c52b37; }
-    .btn-blue { background: var(--hero-blue); color: white; }
-    .btn-blue:hover { background: #1c88d8; }
-    .btn-secondary { background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border); }
-    .btn-secondary:hover { color: var(--text); border-color: #48546a; }
+    .btn:active {
+      transform: scale(0.985);
+    }
+
+    .btn-sm { padding: 7px 14px; font-size: 12px; border-radius: 8px; }
+
+    .btn-primary {
+      background: linear-gradient(180deg, #e64940 0%, #c42b22 100%);
+      color: #ffffff;
+      border: 1px solid rgba(255, 140, 130, 0.35);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 4px 16px var(--spider-red-glow);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(180deg, #f2554c 0%, #d43128 100%);
+      border-color: rgba(255, 170, 160, 0.5);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 22px rgba(222, 68, 59, 0.55);
+      transform: translateY(-1.5px);
+    }
+
+    .btn-blue {
+      background: linear-gradient(180deg, #1688d9 0%, #006bb4 100%);
+      color: #ffffff;
+      border: 1px solid rgba(130, 205, 255, 0.35);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 4px 16px rgba(0, 107, 180, 0.42);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    }
+
+    .btn-blue:hover {
+      background: linear-gradient(180deg, #2499ed 0%, #007bc7 100%);
+      border-color: rgba(160, 220, 255, 0.5);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 22px rgba(0, 107, 180, 0.55);
+      transform: translateY(-1.5px);
+    }
+
+    .btn-secondary {
+      background: rgba(22, 35, 37, 0.65);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(32, 48, 52, 0.85);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1.5px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    }
 
     main {
       flex: 1;
@@ -122,42 +191,52 @@
       margin: 0 auto;
       padding: 24px;
       width: 100%;
+      position: relative;
+      z-index: 1;
     }
 
     /* Hero notice banner if hero logs into citizen portal */
     #hero-notice-banner {
       display: none;
-      background: linear-gradient(135deg, rgba(230, 57, 70, 0.15) 0%, rgba(42, 157, 244, 0.15) 100%);
-      border: 1px solid var(--spider-red);
-      border-radius: 12px;
-      padding: 14px 20px;
+      background: rgba(22, 35, 37, 0.75);
+      border: 1px solid rgba(222, 68, 59, 0.5);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 16px;
+      padding: 16px 24px;
       margin-bottom: 24px;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
 
     /* Guest Banner */
     #guest-banner {
-      background: linear-gradient(135deg, rgba(42, 157, 244, 0.1) 0%, rgba(230, 57, 70, 0.08) 100%);
+      background: rgba(18, 24, 38, 0.82);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px 24px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 16px;
+      padding: 24px 28px;
       margin-bottom: 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
     }
 
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-radius: 18px;
+      padding: 28px;
       margin-bottom: 28px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.1) inset;
     }
 
     .form-group {
@@ -166,18 +245,32 @@
 
     label {
       display: block;
-      font-size: 13px;
-      font-weight: 600;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
       color: var(--text-muted);
       margin-bottom: 6px;
     }
 
     input, select, textarea {
       width: 100%;
-      padding: 10px 14px;
-      background: #090d16;
+      padding: 11px 14px;
+      background: rgba(10, 14, 22, 0.75);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 10px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--spider-red);
+      box-shadow: 0 0 0 3px rgba(222, 68, 59, 0.25);
+    }
       color: var(--text);
       font-size: 14px;
       font-family: inherit;
@@ -702,6 +795,19 @@
       return String(str).replace(/[&<>"']/g, m => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
       }[m]));
+    }
+  </script>
+  <script src="/balatro.js"></script>
+  <script>
+    if (typeof initBalatroBackground === 'function') {
+      initBalatroBackground({
+        color1: '#DE443B',
+        color2: '#006BB4',
+        color3: '#162325',
+        swirl: 0.25,
+        pixelSize: 1.5,
+        mouseInteraction: true
+      });
     }
   </script>
 </body>
