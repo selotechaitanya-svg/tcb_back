@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spider-Sense | NYC Citizen Emergency Portal</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #131926;
+      --border: #232c3d;
+      --spider-red: #e63946;
+      --spider-red-glow: rgba(230, 57, 70, 0.4);
+      --hero-blue: #2a9df4;
+      --hero-blue-glow: rgba(42, 157, 244, 0.35);
+      --green: #2ecc71;
+      --gold: #f4a261;
+      --purple: #a855f7;
+      --text: #f0f6fc;
+      --text-muted: #8b949e;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(180deg, rgba(19, 25, 38, 0.98) 0%, rgba(9, 13, 22, 0.95) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-icon {
+      font-size: 28px;
+      filter: drop-shadow(0 0 10px var(--spider-red));
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title span:first-child {
+      color: var(--spider-red);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .brand-title span:last-child {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 13px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .btn-primary { background: var(--spider-red); color: white; box-shadow: 0 2px 8px var(--spider-red-glow); }
+    .btn-primary:hover { background: #c52b37; }
+    .btn-blue { background: var(--hero-blue); color: white; }
+    .btn-blue:hover { background: #1c88d8; }
+    .btn-secondary { background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border); }
+    .btn-secondary:hover { color: var(--text); border-color: #48546a; }
+
+    main {
+      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      width: 100%;
+    }
+
+    /* Hero notice banner if hero logs into citizen portal */
+    #hero-notice-banner {
+      display: none;
+      background: linear-gradient(135deg, rgba(230, 57, 70, 0.15) 0%, rgba(42, 157, 244, 0.15) 100%);
+      border: 1px solid var(--spider-red);
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    /* Guest Banner */
+    #guest-banner {
+      background: linear-gradient(135deg, rgba(42, 157, 244, 0.1) 0%, rgba(230, 57, 70, 0.08) 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 14px;
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--spider-red);
+      box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    /* Incidents Grid */
+    .incidents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 18px;
+    }
+
+    .incident-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .severity-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .sev-1 { background: rgba(46, 204, 113, 0.2); color: var(--green); border: 1px solid var(--green); }
+    .sev-2 { background: rgba(42, 157, 244, 0.2); color: var(--hero-blue); border: 1px solid var(--hero-blue); }
+    .sev-3 { background: rgba(244, 162, 97, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+    .sev-4 { background: rgba(230, 57, 70, 0.2); color: var(--spider-red); border: 1px solid var(--spider-red); }
+    .sev-5 { background: var(--spider-red); color: white; }
+
+    .status-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .st-Reported { background: rgba(244, 162, 97, 0.15); color: var(--gold); border: 1px solid rgba(244, 162, 97, 0.4); }
+    .st-Claimed { background: rgba(42, 157, 244, 0.15); color: var(--hero-blue); border: 1px solid rgba(42, 157, 244, 0.4); }
+    .st-In-Progress { background: rgba(168, 85, 247, 0.15); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.4); }
+    .st-Resolved { background: rgba(46, 204, 113, 0.15); color: var(--green); border: 1px solid rgba(46, 204, 113, 0.4); }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .desc-box {
+      font-size: 13px;
+      color: #c9d1d9;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 10px 12px;
+      border-radius: 8px;
+      border-left: 3px solid var(--border);
+      line-height: 1.5;
+    }
+
+    .history-drawer {
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 12px;
+      display: none;
+      margin-top: 8px;
+    }
+
+    .history-item {
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .history-item:last-child { border-bottom: none; }
+
+    /* Toast */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 380px;
+    }
+
+    .toast-success { background: #132e1f; border: 1px solid var(--green); color: #c4f3d2; }
+    .toast-error { background: #381518; border: 1px solid var(--spider-red); color: #ffd3d6; }
+    .toast-info { background: #142538; border: 1px solid var(--hero-blue); color: #d0e7ff; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/" class="brand">
+      <div class="brand-icon">🕷️</div>
+      <div class="brand-title">
+        <span>SPIDER-SENSE</span>
+        <span>NYC CITIZEN EMERGENCY DISPATCH NETWORK</span>
+      </div>
+    </a>
+
+    <div class="header-actions">
+      <div class="user-pill" id="user-display">
+        <span>👤 Guest</span>
+      </div>
+      <a href="/login?method=otp" class="btn btn-secondary btn-sm" id="btn-login-nav">
+        ✉️ Sign In (OTP)
+      </a>
+      <a href="/login?method=password" class="btn btn-secondary btn-sm" id="btn-login-pass-nav">
+        🔑 Password
+      </a>
+      <a href="/register" class="btn btn-primary btn-sm" id="btn-register-nav">
+        Sign Up
+      </a>
+      <button class="btn btn-secondary btn-sm" id="btn-logout" style="display: none;" onclick="handleSignOut()">
+        Sign Out
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Notification Banner if Hero visits citizen portal -->
+    <div id="hero-notice-banner">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:24px;">🦸</span>
+        <div>
+          <b>Hero Profile Detected</b>
+          <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">You are currently signed in as an authorized NYC Hero.</p>
+        </div>
+      </div>
+      <a href="/admin" class="btn btn-primary">
+        Go to Hero Command Center (/admin) ➔
+      </a>
+    </div>
+
+    <!-- Guest Banner if not signed in -->
+    <div id="guest-banner">
+      <div>
+        <h2 style="font-size: 18px; font-weight: 800;">NYC Citizen Incident Reporting Portal</h2>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+          Report neighborhood crimes, gang terror, or crisis emergencies directly to active heroes across the five boroughs.
+        </p>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="/login?method=otp" class="btn btn-secondary">
+          ✉️ Sign In with OTP
+        </a>
+        <a href="/login?method=password" class="btn btn-secondary">
+          🔑 Sign In with Password
+        </a>
+        <a href="/register" class="btn btn-primary">
+          📝 Register New Account
+        </a>
+      </div>
+    </div>
+
+    <!-- Citizen Report Form Card -->
+    <div class="card" id="report-card">
+      <h2 style="font-size: 18px; margin-bottom: 6px; display:flex; align-items:center; gap:8px;">
+        📢 Report Emergency / Incident to Heroes
+      </h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
+        Describe what problem or terror is happening in your society. Alerts are immediately dispatched to nearby heroes.
+      </p>
+
+      <form id="incident-form" onsubmit="handleSubmitIncident(event)">
+        <div class="form-group">
+          <label for="inc-title">Incident Title *</label>
+          <input type="text" id="inc-title" placeholder="e.g. Armed gang terrorizing shops on Queens Boulevard" required>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="inc-category">Incident Category *</label>
+            <select id="inc-category" required>
+              <option value="Terror / Gang" selected>Terror / Gang Violence</option>
+              <option value="Robbery">Armed Robbery / Theft</option>
+              <option value="Supervillain">Supervillain Attack</option>
+              <option value="Fire">Fire / Hazardous Scene</option>
+              <option value="Hostage">Hostage / Kidnapping Crisis</option>
+              <option value="Other">Other Neighborhood Problem</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="inc-severity">Threat Severity (1 = Minor, 5 = Avengers Threat) *</label>
+            <select id="inc-severity" required>
+              <option value="1">Level 1 - Minor Issue</option>
+              <option value="2">Level 2 - Moderate Danger</option>
+              <option value="3" selected>Level 3 - Serious Emergency</option>
+              <option value="4">Level 4 - Severe High-Threat</option>
+              <option value="5">Level 5 - Catastrophic Super-Threat</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="inc-location">Location / Borough Landmark *</label>
+            <input type="text" id="inc-location" placeholder="e.g. Queens Blvd & 71st Ave, Queens" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="inc-description">Detailed Description of Problem / Terror *</label>
+          <textarea id="inc-description" rows="4" placeholder="Detail the situation, suspects, weapons, citizen risks, or immediate dangers..." required></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end;">
+          <button type="submit" class="btn btn-primary" id="btn-submit-report">
+            🚀 Dispatch Emergency Alert
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- My Reported Incidents Section -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h3 style="font-size: 18px; font-weight: 700;">
+        📋 My Reported Incidents & Live Hero Tracking
+      </h3>
+      <button class="btn btn-secondary btn-sm" onclick="loadMyIncidents()">
+        🔄 Refresh My Reports
+      </button>
+    </div>
+
+    <div id="incidents-container" class="incidents-grid">
+      <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--card-bg); border-radius: 12px; border: 1px dashed var(--border);">
+        <p style="color: var(--text-muted); font-size: 14px;">Sign in to view and track your submitted emergency reports.</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast-container"></div>
+
+  <footer>
+    Spider-Sense Emergency Alert Network • NYC Citizen Dispatch • MongoDB Atlas Engine
+  </footer>
+
+  <script>
+    let currentUser = null;
+    let authToken = localStorage.getItem('spider_token');
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '⚠️' : 'ℹ️'}</span> ${message}`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      authToken = localStorage.getItem('spider_token');
+      if (authToken) {
+        try {
+          const res = await fetch('/api/auth/me', {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+          });
+          const data = await res.json();
+          if (res.ok && data.user) {
+            currentUser = data.user;
+            updateUserUI();
+
+            if (currentUser.isHero || currentUser.role === 'Hero') {
+              document.getElementById('hero-notice-banner').style.display = 'flex';
+            }
+            loadMyIncidents();
+          } else {
+            handleSignOut(false);
+          }
+        } catch (e) {
+          handleSignOut(false);
+        }
+      }
+    });
+
+    function updateUserUI() {
+      const display = document.getElementById('user-display');
+      const loginNav = document.getElementById('btn-login-nav');
+      const loginPassNav = document.getElementById('btn-login-pass-nav');
+      const regNav = document.getElementById('btn-register-nav');
+      const logoutBtn = document.getElementById('btn-logout');
+      const guestBanner = document.getElementById('guest-banner');
+
+      if (currentUser) {
+        display.innerHTML = `<span>👤 <b>${escapeHtml(currentUser.name)}</b> (${currentUser.role})</span>`;
+        if (loginNav) loginNav.style.display = 'none';
+        if (loginPassNav) loginPassNav.style.display = 'none';
+        if (regNav) regNav.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+        if (guestBanner) guestBanner.style.display = 'none';
+      } else {
+        display.innerHTML = `<span>👤 Guest</span>`;
+        if (loginNav) loginNav.style.display = 'inline-flex';
+        if (loginPassNav) loginPassNav.style.display = 'inline-flex';
+        if (regNav) regNav.style.display = 'inline-flex';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (guestBanner) guestBanner.style.display = 'flex';
+      }
+    }
+
+    // Submit Emergency Incident Report
+    async function handleSubmitIncident(e) {
+      e.preventDefault();
+      if (!authToken || !currentUser) {
+        showToast('Please sign in or register before submitting an emergency report.', 'error');
+        setTimeout(() => { window.location.href = '/login'; }, 1200);
+        return;
+      }
+
+      const title = document.getElementById('inc-title').value.trim();
+      const category = document.getElementById('inc-category').value;
+      const severity = parseInt(document.getElementById('inc-severity').value, 10);
+      const location = document.getElementById('inc-location').value.trim();
+      const description = document.getElementById('inc-description').value.trim();
+      const btn = document.getElementById('btn-submit-report');
+
+      btn.disabled = true;
+      btn.innerText = 'Dispatching to heroes...';
+
+      try {
+        const res = await fetch('/api/incidents', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ title, category, severity, location, description })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          showToast('Incident report dispatched! Heroes across NYC alerted.', 'success');
+          document.getElementById('incident-form').reset();
+          loadMyIncidents();
+        } else {
+          showToast(data.error || 'Failed to dispatch incident.', 'error');
+        }
+      } catch (err) {
+        showToast('Network error submitting incident report.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = '🚀 Dispatch Emergency Alert';
+      }
+    }
+
+    // Load Citizen's Own Reports from MongoDB
+    async function loadMyIncidents() {
+      const container = document.getElementById('incidents-container');
+
+      if (!authToken) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--card-bg); border-radius: 12px; border: 1px dashed var(--border);">
+            <p style="color: var(--text-muted); font-size: 14px;">Sign in to view and track your submitted emergency reports.</p>
+          </div>
+        `;
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/incidents?limit=50', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Failed to load reports');
+        }
+
+        const items = data.items || [];
+        if (items.length === 0) {
+          container.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--card-bg); border-radius: 12px; border: 1px dashed var(--border);">
+              <div style="font-size: 32px; margin-bottom: 8px;">🛡️</div>
+              <h4 style="margin-bottom: 4px;">No Incidents Reported Yet</h4>
+              <p style="font-size: 13px; color: var(--text-muted);">
+                If there is a problem, gang terror, or emergency in your area, use the dispatch form above.
+              </p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = items.map(inc => renderIncidentCard(inc)).join('');
+      } catch (err) {
+        container.innerHTML = `<div style="grid-column:1/-1; color:var(--spider-red); text-align:center;">${err.message}</div>`;
+      }
+    }
+
+    function renderIncidentCard(inc) {
+      const id = inc._id || inc.id;
+      const stClass = (inc.status || 'Reported').replace(/\s+/g, '-');
+      const heroText = inc.heroName ? `Hero responding: <b>${escapeHtml(inc.heroName)}</b>` : 'Awaiting hero response';
+
+      return `
+        <div class="incident-card" id="card-${id}">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <span class="card-title">${escapeHtml(inc.title)}</span>
+            <span class="severity-badge sev-${inc.severity}">Threat Lvl ${inc.severity}</span>
+          </div>
+
+          <div class="meta-row">
+            <span>📍 ${escapeHtml(inc.location)}</span>
+            <span>🏷️ ${escapeHtml(inc.category)}</span>
+            <span class="status-badge st-${stClass}">${inc.status}</span>
+          </div>
+
+          <div class="desc-box">
+            ${escapeHtml(inc.description)}
+          </div>
+
+          <div style="font-size: 11px; color: var(--text-muted); display:flex; justify-content:space-between; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+            <span>${heroText}</span>
+            <span>${new Date(inc.createdAt || inc.created_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+
+          <button class="btn btn-secondary btn-sm" onclick="toggleAuditHistory('${id}')" style="align-self:flex-end;">
+            📜 History Log
+          </button>
+
+          <div id="history-${id}" class="history-drawer">
+            <div style="color:var(--text-muted); text-align:center;">Loading audit trail...</div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function toggleAuditHistory(incidentId) {
+      const drawer = document.getElementById(`history-${incidentId}`);
+      if (drawer.style.display === 'block') {
+        drawer.style.display = 'none';
+        return;
+      }
+      drawer.style.display = 'block';
+
+      try {
+        const res = await fetch(`/api/incidents/${incidentId}/history`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        const historyList = Array.isArray(data) ? data : (Array.isArray(data.history) ? data.history : []);
+
+        if (res.ok && historyList.length > 0) {
+          drawer.innerHTML = historyList.map(h => `
+            <div class="history-item">
+              <div style="display:flex; justify-content:space-between;">
+                <span><b>${h.previous_status || 'Reported'}</b> ➔ <b>${h.new_status}</b></span>
+                <span style="color:var(--text-muted); font-size:11px;">${new Date(h.changed_at).toLocaleTimeString()}</span>
+              </div>
+              <div style="font-size:11px; color:#a1aab7;">By: ${escapeHtml(h.changed_by_name || 'System')}</div>
+              ${h.notes ? `<div style="font-style:italic; color:#8b949e; margin-top:2px;">"${escapeHtml(h.notes)}"</div>` : ''}
+            </div>
+          `).join('');
+        } else {
+          drawer.innerHTML = '<div style="color:var(--text-muted);">No history recorded yet.</div>';
+        }
+      } catch (err) {
+        drawer.innerHTML = `<div style="color:var(--spider-red);">Error loading history: ${err.message}</div>`;
+      }
+    }
+
+    async function handleSignOut(callServer = true) {
+      if (callServer) {
+        try { await fetch('/api/auth/logout', { method: 'POST' }); } catch (e) {}
+      }
+      localStorage.removeItem('spider_token');
+      authToken = null;
+      currentUser = null;
+      updateUserUI();
+      loadMyIncidents();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+  </script>
+</body>
+</html>

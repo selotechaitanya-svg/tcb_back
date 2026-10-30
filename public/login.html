@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Spider-Sense Alert Network</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #131926;
+      --border: #232c3d;
+      --spider-red: #e63946;
+      --spider-red-hover: #c52b37;
+      --hero-blue: #2a9df4;
+      --green: #2ecc71;
+      --gold: #f4a261;
+      --text: #f0f6fc;
+      --text-muted: #8b949e;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 16px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background spider glow */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(230, 57, 70, 0.15) 0%, rgba(42, 157, 244, 0.05) 50%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 24px;
+      z-index: 1;
+    }
+
+    .brand-logo {
+      font-size: 44px;
+      display: inline-block;
+      filter: drop-shadow(0 0 16px rgba(230, 57, 70, 0.6));
+      animation: spider-float 3s ease-in-out infinite;
+    }
+
+    @keyframes spider-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-top: 8px;
+    }
+
+    .brand-title span {
+      color: var(--spider-red);
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Auth Card */
+    .auth-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Method Selector Tabs */
+    .method-tabs {
+      display: flex;
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tab-btn.active {
+      background: var(--card-bg);
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border);
+    }
+
+    .tab-btn.active.tab-otp {
+      color: var(--spider-red);
+    }
+
+    .tab-btn.active.tab-pass {
+      color: var(--hero-blue);
+    }
+
+    .form-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .form-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--spider-red);
+      box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
+    }
+
+    .otp-input {
+      font-size: 24px;
+      letter-spacing: 8px;
+      text-align: center;
+      font-family: monospace;
+      font-weight: 700;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--spider-red);
+      color: white;
+      box-shadow: 0 4px 14px rgba(230, 57, 70, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--spider-red-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-blue {
+      background: var(--hero-blue);
+      color: white;
+      box-shadow: 0 4px 14px rgba(42, 157, 244, 0.35);
+    }
+
+    .btn-blue:hover {
+      background: #1c88d8;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      margin-top: 10px;
+    }
+
+    .btn-secondary:hover {
+      color: var(--text);
+      border-color: #48546a;
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .auth-footer a {
+      color: var(--spider-red);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Toast */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slide-up 0.25s ease-out;
+      max-width: 360px;
+    }
+
+    .toast-success { background: #132e1f; border: 1px solid var(--green); color: #c4f3d2; }
+    .toast-error { background: #381518; border: 1px solid var(--spider-red); color: #ffd3d6; }
+    .toast-info { background: #142538; border: 1px solid var(--hero-blue); color: #d0e7ff; }
+
+    @keyframes slide-up {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brand-header">
+    <div class="brand-logo">🕷️</div>
+    <div class="brand-title">SPIDER-<span>SENSE</span></div>
+    <div class="brand-subtitle">New York City Emergency Alert & Hero Dispatch</div>
+  </div>
+
+  <div class="auth-card">
+    <!-- Immediate Tab Selector: OTP vs Password -->
+    <div class="method-tabs">
+      <button type="button" class="tab-btn active tab-otp" id="tab-btn-otp" onclick="switchTab('otp')">
+        ✉️ Sign in with OTP
+      </button>
+      <button type="button" class="tab-btn tab-pass" id="tab-btn-pass" onclick="switchTab('password')">
+        🔑 Sign in with Password
+      </button>
+    </div>
+
+    <!-- TAB 1: SIGN IN THROUGH 6-DIGIT EMAIL OTP -->
+    <div id="view-otp">
+      <div class="form-title">Email OTP Sign In</div>
+      <div class="form-desc">
+        Enter your email to receive a secure 6-digit one-time code via Resend or Gmail.
+      </div>
+
+      <!-- Step A: Enter Email & Request Code -->
+      <div id="otp-step-request">
+        <form onsubmit="handleSendOtp(event)">
+          <div class="form-group">
+            <label for="otp-email">Email Address</label>
+            <input type="email" id="otp-email" placeholder="name@domain.com" required autofocus>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btn-request-code">
+            📩 Send 6-Digit Verification Code
+          </button>
+        </form>
+      </div>
+
+      <!-- Step B: Verify Code -->
+      <div id="otp-step-verify" style="display: none;">
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
+          Code dispatched to <b id="otp-sent-email" style="color:var(--text)"></b>
+        </p>
+
+        <form onsubmit="handleVerifyOtp(event)">
+          <div class="form-group">
+            <label for="otp-code">6-Digit Code</label>
+            <input type="text" id="otp-code" class="otp-input" maxlength="6" placeholder="123456" required autocomplete="one-time-code">
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btn-submit-verify">
+            Verify & Sign In ⚡
+          </button>
+
+          <button type="button" class="btn btn-secondary" onclick="backToOtpEmail()">
+            ← Change Email / Resend
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- TAB 2: SIGN IN THROUGH PASSWORD -->
+    <div id="view-password" style="display: none;">
+      <div class="form-title">Password Sign In</div>
+      <div class="form-desc">
+        Sign in directly with your registered email and password.
+      </div>
+
+      <form onsubmit="handlePasswordLogin(event)">
+        <div class="form-group">
+          <label for="pass-email">Email Address</label>
+          <input type="email" id="pass-email" placeholder="name@domain.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="pass-password">Account Password</label>
+          <input type="password" id="pass-password" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-blue" id="btn-pass-login">
+          Sign In with Password ➔
+        </button>
+      </form>
+    </div>
+
+    <!-- Switch to Sign Up -->
+    <div class="auth-footer">
+      Don't have an account? <a href="/register">Sign Up as Citizen or Hero</a>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script>
+    let activeTab = 'otp';
+    let otpTargetEmail = '';
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '⚠️' : 'ℹ️'}</span> ${message}`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 4500);
+    }
+
+    // Auto-check active 7-day session
+    window.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('email')) {
+        const prefilled = params.get('email');
+        document.getElementById('otp-email').value = prefilled;
+        document.getElementById('pass-email').value = prefilled;
+      }
+
+      if (params.get('method') === 'password') {
+        switchTab('password');
+      }
+
+      const token = localStorage.getItem('spider_token');
+      if (token) {
+        try {
+          const res = await fetch('/api/auth/me', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (res.ok && data.user) {
+            if (data.user.isHero || data.user.role === 'Hero') {
+              window.location.href = '/admin';
+            } else {
+              window.location.href = '/';
+            }
+          }
+        } catch (e) {
+          localStorage.removeItem('spider_token');
+        }
+      }
+    });
+
+    // Switch between OTP and Password tabs
+    function switchTab(tab) {
+      activeTab = tab;
+      const btnOtp = document.getElementById('tab-btn-otp');
+      const btnPass = document.getElementById('tab-btn-pass');
+      const viewOtp = document.getElementById('view-otp');
+      const viewPass = document.getElementById('view-password');
+
+      if (tab === 'otp') {
+        btnOtp.classList.add('active');
+        btnPass.classList.remove('active');
+        viewOtp.style.display = 'block';
+        viewPass.style.display = 'none';
+        document.getElementById('otp-email').focus();
+      } else {
+        btnPass.classList.add('active');
+        btnOtp.classList.remove('active');
+        viewPass.style.display = 'block';
+        viewOtp.style.display = 'none';
+        // Sync email between tabs
+        const currentEmail = document.getElementById('otp-email').value.trim();
+        if (currentEmail) {
+          document.getElementById('pass-email').value = currentEmail;
+        }
+        document.getElementById('pass-email').focus();
+      }
+    }
+
+    // ─── OPTION 1: SIGN IN WITH OTP ─────────────────────────────
+    async function handleSendOtp(e) {
+      e.preventDefault();
+      const email = document.getElementById('otp-email').value.trim();
+      const btn = document.getElementById('btn-request-code');
+
+      if (!email || !email.includes('@')) {
+        showToast('Please enter a valid email address.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = 'Checking & dispatching code...';
+
+      try {
+        const res = await fetch('/api/auth/request-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, type: 'login' })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          otpTargetEmail = email;
+          document.getElementById('otp-sent-email').innerText = email;
+          document.getElementById('otp-step-request').style.display = 'none';
+          document.getElementById('otp-step-verify').style.display = 'block';
+
+          showToast(data.message || '6-digit code sent! Check your inbox.', 'success');
+
+          if (data.devOtp) {
+            document.getElementById('otp-code').value = data.devOtp;
+            showToast(`[Dev Console Code]: ${data.devOtp}`, 'info');
+          }
+          document.getElementById('otp-code').focus();
+        } else if (data.notFound) {
+          showToast('No account found with this email — redirecting to Sign Up...', 'info');
+          setTimeout(() => {
+            window.location.href = `/register?email=${encodeURIComponent(email)}`;
+          }, 1200);
+        } else {
+          showToast(data.error || 'Failed to send verification code.', 'error');
+        }
+      } catch (err) {
+        showToast('Network error dispatching OTP.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = '📩 Send 6-Digit Verification Code';
+      }
+    }
+
+    async function handleVerifyOtp(e) {
+      e.preventDefault();
+      const otp = document.getElementById('otp-code').value.trim();
+      const btn = document.getElementById('btn-submit-verify');
+
+      if (otp.length !== 6) {
+        showToast('Please enter the full 6-digit verification code.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = 'Verifying...';
+
+      try {
+        const res = await fetch('/api/auth/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: otpTargetEmail, otp })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          localStorage.setItem('spider_token', data.token);
+          showToast('Signed in successfully! Session valid for 7 days.', 'success');
+          setTimeout(() => {
+            window.location.href = data.redirectUrl || '/';
+          }, 800);
+        } else {
+          showToast(data.error || 'Incorrect code. Please try again.', 'error');
+        }
+      } catch (err) {
+        showToast('Verification failed. Please try again.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Verify & Sign In ⚡';
+      }
+    }
+
+    function backToOtpEmail() {
+      document.getElementById('otp-step-verify').style.display = 'none';
+      document.getElementById('otp-step-request').style.display = 'block';
+    }
+
+    // ─── OPTION 2: SIGN IN WITH PASSWORD ────────────────────────
+    async function handlePasswordLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('pass-email').value.trim();
+      const password = document.getElementById('pass-password').value;
+      const btn = document.getElementById('btn-pass-login');
+
+      if (!email || !password) {
+        showToast('Please enter both email and password.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = 'Signing in...';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          localStorage.setItem('spider_token', data.token);
+          showToast('Signed in successfully! Establishing 7-day session...', 'success');
+          setTimeout(() => {
+            window.location.href = data.redirectUrl || '/';
+          }, 800);
+        } else if (data.notFound) {
+          showToast('No account found with this email — redirecting to Sign Up...', 'info');
+          setTimeout(() => {
+            window.location.href = `/register?email=${encodeURIComponent(email)}`;
+          }, 1200);
+        } else {
+          showToast(data.error || 'Invalid email or password.', 'error');
+        }
+      } catch (err) {
+        showToast('Network error signing in with password.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Sign In with Password ➔';
+      }
+    }
+  </script>
+</body>
+</html>

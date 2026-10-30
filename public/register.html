@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up | Spider-Sense Alert Network</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #131926;
+      --border: #232c3d;
+      --spider-red: #e63946;
+      --spider-red-hover: #c52b37;
+      --hero-blue: #2a9df4;
+      --green: #2ecc71;
+      --gold: #f4a261;
+      --text: #f0f6fc;
+      --text-muted: #8b949e;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 16px;
+      position: relative;
+    }
+
+    /* Ambient background glow */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(42, 157, 244, 0.12) 0%, rgba(230, 57, 70, 0.08) 50%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 24px;
+      z-index: 1;
+    }
+
+    .brand-logo {
+      font-size: 40px;
+      display: inline-block;
+      filter: drop-shadow(0 0 16px rgba(42, 157, 244, 0.6));
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-top: 6px;
+    }
+
+    .brand-title span {
+      color: var(--spider-red);
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Card */
+    .auth-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Progress Step Bars */
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .step-header span.active-step-text {
+      color: var(--spider-red);
+    }
+
+    .step-bars {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 24px;
+    }
+
+    .step-bar {
+      flex: 1;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .step-bar.active {
+      background: var(--spider-red);
+      box-shadow: 0 0 8px rgba(230, 57, 70, 0.5);
+    }
+
+    .form-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .form-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--spider-red);
+      box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
+    }
+
+    .otp-input {
+      font-size: 26px;
+      letter-spacing: 8px;
+      text-align: center;
+      font-family: monospace;
+      font-weight: 700;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--spider-red);
+      color: white;
+      box-shadow: 0 4px 14px rgba(230, 57, 70, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--spider-red-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      margin-top: 10px;
+    }
+
+    .btn-secondary:hover {
+      color: var(--text);
+      border-color: #48546a;
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .auth-footer a {
+      color: var(--hero-blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Toast */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slide-up 0.25s ease-out;
+      max-width: 360px;
+    }
+
+    .toast-success { background: #132e1f; border: 1px solid var(--green); color: #c4f3d2; }
+    .toast-error { background: #381518; border: 1px solid var(--spider-red); color: #ffd3d6; }
+    .toast-info { background: #142538; border: 1px solid var(--hero-blue); color: #d0e7ff; }
+
+    @keyframes slide-up {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brand-header">
+    <div class="brand-logo">🕷️</div>
+    <div class="brand-title">SPIDER-<span>SENSE</span></div>
+    <div class="brand-subtitle">Create Your New York Emergency Network Account</div>
+  </div>
+
+  <div class="auth-card">
+    <div class="step-header">
+      <span id="step-label" class="active-step-text">Step 1: Account Details</span>
+      <span id="step-number">1 / 2</span>
+    </div>
+
+    <!-- Progress Step Bars -->
+    <div class="step-bars">
+      <div class="step-bar active" id="bar-1"></div>
+      <div class="step-bar" id="bar-2"></div>
+    </div>
+
+    <!-- STAGE 1: Profile & Password Configuration -->
+    <div id="stage-details">
+      <div class="form-title">Register New Account</div>
+      <div class="form-desc">Provide your information and set a secure password. First we will verify your email with a 6-digit code.</div>
+
+      <form onsubmit="handleRequestRegistrationOtp(event)">
+        <div class="form-group">
+          <label for="reg-name">Full Name *</label>
+          <input type="text" id="reg-name" placeholder="Peter Parker" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email">Email Address *</label>
+          <input type="email" id="reg-email" placeholder="name@domain.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-role">Role Designation *</label>
+          <select id="reg-role" required>
+            <option value="Citizen" selected>🏙️ Citizen (Report emergencies & neighborhood crimes)</option>
+            <option value="Hero">🦸 Hero (First responder / superhero dispatch & incident resolution)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password">Password (Minimum 6 characters) *</label>
+          <input type="password" id="reg-password" placeholder="••••••••" minlength="6" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-confirm-password">Re-Enter Password *</label>
+          <input type="password" id="reg-confirm-password" placeholder="••••••••" minlength="6" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="btn-request-otp">
+          Send Email Verification Code →
+        </button>
+      </form>
+    </div>
+
+    <!-- STAGE 2: 6-Digit Email OTP Verification -->
+    <div id="stage-otp" style="display: none;">
+      <div class="form-title">Verify Your Email Address</div>
+      <div class="form-desc">
+        We sent a 6-digit verification code to <b id="display-reg-email" style="color:var(--text)"></b>. Enter the code below to finalize your account and establish your 7-day session.
+      </div>
+
+      <form onsubmit="handleFinalizeRegistration(event)">
+        <div class="form-group">
+          <label for="reg-otp">6-Digit Verification Code *</label>
+          <input type="text" id="reg-otp" class="otp-input" maxlength="6" placeholder="123456" required autocomplete="one-time-code">
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="btn-finalize-reg">
+          Verify & Complete Registration 🚀
+        </button>
+
+        <button type="button" class="btn btn-secondary" onclick="backToDetailsStage()">
+          ← Edit Information
+        </button>
+      </form>
+    </div>
+
+    <div class="auth-footer">
+      Already have an account? <a href="/login">Sign In Here</a>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script>
+    let formData = {
+      name: '',
+      email: '',
+      role: 'Citizen',
+      password: ''
+    };
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '⚠️' : 'ℹ️'}</span> ${message}`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 4500);
+    }
+
+    // Pre-fill email if passed in query param from login redirect
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('email')) {
+        document.getElementById('reg-email').value = params.get('email');
+      }
+    });
+
+    // Stage 1 -> Stage 2
+    async function handleRequestRegistrationOtp(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const role = document.getElementById('reg-role').value;
+      const password = document.getElementById('reg-password').value;
+      const confirmPassword = document.getElementById('reg-confirm-password').value;
+      const btn = document.getElementById('btn-request-otp');
+
+      if (!name) {
+        showToast('Please enter your full name.', 'error');
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        showToast('Please enter a valid email address.', 'error');
+        return;
+      }
+      if (password.length < 6) {
+        showToast('Password must be at least 6 characters long.', 'error');
+        return;
+      }
+      if (password !== confirmPassword) {
+        showToast('Passwords do not match. Please re-enter carefully.', 'error');
+        return;
+      }
+
+      formData = { name, email, role, password };
+
+      btn.disabled = true;
+      btn.innerText = 'Dispatching verification code...';
+
+      try {
+        const res = await fetch('/api/auth/request-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, type: 'register' })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showToast(data.message || 'Verification code sent! Check your inbox.', 'success');
+          document.getElementById('stage-details').style.display = 'none';
+          document.getElementById('stage-otp').style.display = 'block';
+          document.getElementById('bar-2').classList.add('active');
+          document.getElementById('step-label').innerText = 'Step 2: Email Verification';
+          document.getElementById('step-number').innerText = '2 / 2';
+          document.getElementById('display-reg-email').innerText = email;
+
+          if (data.devOtp) {
+            document.getElementById('reg-otp').value = data.devOtp;
+            showToast(`[Dev Console Code]: ${data.devOtp}`, 'info');
+          }
+          document.getElementById('reg-otp').focus();
+        } else if (data.alreadyExists) {
+          showToast('An account with this email already exists — redirecting to sign in!', 'info');
+          setTimeout(() => {
+            window.location.href = `/login?email=${encodeURIComponent(email)}`;
+          }, 1500);
+        } else {
+          showToast(data.error || 'Failed to send verification code.', 'error');
+        }
+      } catch (err) {
+        showToast('Connection error requesting OTP.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Send Email Verification Code →';
+      }
+    }
+
+    function backToDetailsStage() {
+      document.getElementById('stage-otp').style.display = 'none';
+      document.getElementById('stage-details').style.display = 'block';
+      document.getElementById('bar-2').classList.remove('active');
+      document.getElementById('step-label').innerText = 'Step 1: Account Details';
+      document.getElementById('step-number').innerText = '1 / 2';
+    }
+
+    // Finalize registration with OTP
+    async function handleFinalizeRegistration(e) {
+      e.preventDefault();
+      const otp = document.getElementById('reg-otp').value.trim();
+      const btn = document.getElementById('btn-finalize-reg');
+
+      if (otp.length !== 6) {
+        showToast('Please enter the full 6-digit code.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = 'Finalizing account...';
+
+      try {
+        const res = await fetch('/api/auth/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: formData.email,
+            otp,
+            name: formData.name,
+            password: formData.password,
+            role: formData.role
+          })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          localStorage.setItem('spider_token', data.token);
+          showToast('Registration complete! Welcome to Spider-Sense.', 'success');
+          setTimeout(() => {
+            window.location.href = data.redirectUrl || (data.user.role === 'Hero' ? '/admin' : '/');
+          }, 900);
+        } else {
+          showToast(data.error || 'Incorrect verification code.', 'error');
+        }
+      } catch (err) {
+        showToast('Network error during registration.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Verify & Complete Registration 🚀';
+      }
+    }
+  </script>
+</body>
+</html>
+

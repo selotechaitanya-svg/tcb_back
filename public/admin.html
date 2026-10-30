@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero Command Center | Spider-Sense Dispatch</title>
+  <style>
+    :root {
+      --bg: #070a12;
+      --card-bg: #111622;
+      --card-hover: #161d2d;
+      --border: #242c3d;
+      --spider-red: #e63946;
+      --spider-red-glow: rgba(230, 57, 70, 0.4);
+      --hero-blue: #2a9df4;
+      --hero-blue-glow: rgba(42, 157, 244, 0.35);
+      --green: #2ecc71;
+      --gold: #f4a261;
+      --purple: #a855f7;
+      --text: #f0f6fc;
+      --text-muted: #8b949e;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(180deg, rgba(17, 22, 34, 0.98) 0%, rgba(11, 15, 23, 0.95) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-icon {
+      font-size: 28px;
+      filter: drop-shadow(0 0 10px var(--spider-red));
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title span:first-child {
+      color: var(--spider-red);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .brand-title span:last-child {
+      font-size: 11px;
+      color: var(--hero-blue);
+      letter-spacing: 0.8px;
+      font-weight: 700;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(230, 57, 70, 0.15);
+      border: 1px solid rgba(230, 57, 70, 0.4);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--spider-red);
+      text-transform: uppercase;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .btn-primary { background: var(--spider-red); color: white; box-shadow: 0 2px 8px var(--spider-red-glow); }
+    .btn-primary:hover { background: #c52b37; }
+    .btn-blue { background: var(--hero-blue); color: white; }
+    .btn-blue:hover { background: #1c88d8; }
+    .btn-green { background: var(--green); color: white; }
+    .btn-green:hover { background: #27ae60; }
+    .btn-secondary { background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border); }
+    .btn-secondary:hover { color: var(--text); border-color: #48546a; }
+
+    main {
+      flex: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+      width: 100%;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(230, 57, 70, 0.1) 0%, rgba(42, 157, 244, 0.08) 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .hero-banner h2 { font-size: 18px; font-weight: 800; }
+    .hero-banner p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Feed Controls */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    select {
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 6px 12px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    select:focus { border-color: var(--spider-red); }
+
+    /* Incidents Grid */
+    .incidents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 18px;
+    }
+
+    .incident-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .incident-card:hover {
+      transform: translateY(-2px);
+      border-color: #48546a;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .severity-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .sev-1 { background: rgba(46, 204, 113, 0.2); color: var(--green); border: 1px solid var(--green); }
+    .sev-2 { background: rgba(42, 157, 244, 0.2); color: var(--hero-blue); border: 1px solid var(--hero-blue); }
+    .sev-3 { background: rgba(244, 162, 97, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+    .sev-4 { background: rgba(230, 57, 70, 0.2); color: var(--spider-red); border: 1px solid var(--spider-red); }
+    .sev-5 { background: var(--spider-red); color: white; box-shadow: 0 0 10px var(--spider-red); }
+
+    .status-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .st-Reported { background: rgba(244, 162, 97, 0.15); color: var(--gold); border: 1px solid rgba(244, 162, 97, 0.4); }
+    .st-Claimed { background: rgba(42, 157, 244, 0.15); color: var(--hero-blue); border: 1px solid rgba(42, 157, 244, 0.4); }
+    .st-In-Progress { background: rgba(168, 85, 247, 0.15); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.4); }
+    .st-Resolved { background: rgba(46, 204, 113, 0.15); color: var(--green); border: 1px solid rgba(46, 204, 113, 0.4); }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .desc-box {
+      font-size: 13px;
+      color: #c9d1d9;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 10px 12px;
+      border-radius: 8px;
+      border-left: 3px solid var(--border);
+      line-height: 1.5;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* History box */
+    .history-drawer {
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 12px;
+      display: none;
+      margin-top: 8px;
+    }
+
+    .history-item {
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .history-item:last-child { border-bottom: none; }
+
+    /* Access Denied Modal */
+    #denied-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 9999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .denied-card {
+      background: var(--card-bg);
+      border: 2px solid var(--spider-red);
+      border-radius: 16px;
+      padding: 32px 28px;
+      max-width: 440px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(230, 57, 70, 0.4);
+    }
+
+    /* Toast */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 380px;
+    }
+
+    .toast-success { background: #132e1f; border: 1px solid var(--green); color: #c4f3d2; }
+    .toast-error { background: #381518; border: 1px solid var(--spider-red); color: #ffd3d6; }
+    .toast-info { background: #142538; border: 1px solid var(--hero-blue); color: #d0e7ff; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/admin" class="brand">
+      <div class="brand-icon">🕷️</div>
+      <div class="brand-title">
+        <span>HERO COMMAND CENTER</span>
+        <span>NYC EMERGENCY RESPONSE NETWORK (/admin)</span>
+      </div>
+    </a>
+
+    <div class="header-actions">
+      <div class="hero-badge" id="hero-identity">
+        🦸 Authenticating Hero...
+      </div>
+      <a href="/" class="btn btn-secondary btn-sm">
+        🏙️ Citizen View
+      </a>
+      <button class="btn btn-secondary btn-sm" onclick="handleSignOut()">
+        Sign Out
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero-banner">
+      <div>
+        <h2 id="hero-welcome">NYC Hero Tactical Dispatch</h2>
+        <p>Monitor live 911 citizen emergency alerts, claim incidents with atomic CAS locks, and stabilize crisis zones.</p>
+      </div>
+      <div>
+        <button class="btn btn-primary" onclick="loadCitywideIncidents()">
+          🔄 Refresh Dispatch
+        </button>
+      </div>
+    </div>
+
+    <!-- Filters Bar -->
+    <div class="controls-bar">
+      <div class="filter-group">
+        <label style="font-size: 12px; color: var(--text-muted);">Status:</label>
+        <select id="filter-status" onchange="loadCitywideIncidents()">
+          <option value="">All Statuses</option>
+          <option value="Reported" selected>Reported (Open Missions)</option>
+          <option value="Claimed">Claimed</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Resolved">Resolved</option>
+        </select>
+
+        <label style="font-size: 12px; color: var(--text-muted);">Category:</label>
+        <select id="filter-category" onchange="loadCitywideIncidents()">
+          <option value="">All Categories</option>
+          <option value="Robbery">Robbery</option>
+          <option value="Supervillain">Supervillain Attack</option>
+          <option value="Terror / Gang">Terror / Gang Violence</option>
+          <option value="Fire">Fire / Hazard</option>
+          <option value="Hostage">Hostage Crisis</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label style="font-size: 12px; color: var(--text-muted);">Severity:</label>
+        <select id="filter-severity" onchange="loadCitywideIncidents()">
+          <option value="">All Severities</option>
+          <option value="1">Level 1 - Minor</option>
+          <option value="2">Level 2 - Moderate</option>
+          <option value="3">Level 3 - Serious</option>
+          <option value="4">Level 4 - Severe</option>
+          <option value="5">Level 5 - Catastrophic</option>
+        </select>
+      </div>
+
+      <div style="font-size: 13px; color: var(--text-muted);" id="incident-count">
+        Loading...
+      </div>
+    </div>
+
+    <!-- Incidents Container -->
+    <div id="incidents-container" class="incidents-grid">
+      <div style="grid-column: 1/-1; text-align: center; padding: 48px; color: var(--text-muted);">
+        Connecting to MongoDB live dispatch feed...
+      </div>
+    </div>
+  </main>
+
+  <!-- Access Denied Overlay for Non-Heroes -->
+  <div id="denied-overlay">
+    <div class="denied-card">
+      <div style="font-size: 48px; margin-bottom: 12px;">🔒</div>
+      <h2 style="margin-bottom: 8px; color: var(--spider-red);">Hero Authorization Required</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">
+        The <code>/admin</code> command center is restricted strictly to verified superhero responders. Please sign in with an authorized Hero email or register as a Hero.
+      </p>
+      <a href="/login" class="btn btn-primary" style="display: inline-flex; justify-content: center; width: 100%;">
+        Sign In as Hero ➔
+      </a>
+      <a href="/" class="btn btn-secondary" style="display: inline-flex; justify-content: center; width: 100%; margin-top: 10px;">
+        Go to Citizen Emergency Portal
+      </a>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <footer>
+    Spider-Sense Emergency Alert Network • MongoDB Atlas Engine • Port 3000
+  </footer>
+
+  <script>
+    let activeHero = null;
+    let authToken = localStorage.getItem('spider_token');
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '⚠️' : 'ℹ️'}</span> ${message}`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Authenticate Hero on load
+    window.addEventListener('DOMContentLoaded', async () => {
+      authToken = localStorage.getItem('spider_token');
+      if (!authToken) {
+        document.getElementById('denied-overlay').style.display = 'flex';
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/me', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+
+        if (res.ok && data.user) {
+          const isHero = data.user.isHero || data.user.role === 'Hero';
+          if (!isHero) {
+            // Not a hero! Show denied overlay
+            document.getElementById('denied-overlay').style.display = 'flex';
+            return;
+          }
+
+          activeHero = data.user;
+          document.getElementById('hero-identity').innerHTML = `🦸 ${activeHero.name} (${activeHero.email})`;
+          document.getElementById('hero-welcome').innerText = `NYC Dispatch • Hero ${activeHero.name}`;
+          loadCitywideIncidents();
+        } else {
+          document.getElementById('denied-overlay').style.display = 'flex';
+        }
+      } catch (err) {
+        document.getElementById('denied-overlay').style.display = 'flex';
+      }
+    });
+
+    // Load Incidents from MongoDB
+    async function loadCitywideIncidents() {
+      const container = document.getElementById('incidents-container');
+      const status = document.getElementById('filter-status').value;
+      const category = document.getElementById('filter-category').value;
+      const severity = document.getElementById('filter-severity').value;
+
+      let query = `?page=1&limit=50`;
+      if (status) query += `&status=${encodeURIComponent(status)}`;
+      if (category) query += `&category=${encodeURIComponent(category)}`;
+      if (severity) query += `&severity=${encodeURIComponent(severity)}`;
+
+      try {
+        const res = await fetch(`/api/incidents${query}`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Failed to load dispatch feed');
+        }
+
+        const items = data.items || [];
+        document.getElementById('incident-count').innerText = `${items.length} Incidents in Queue`;
+
+        if (items.length === 0) {
+          container.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--card-bg); border-radius: 12px; border: 1px dashed var(--border);">
+              <div style="font-size: 36px; margin-bottom: 8px;">🛡️</div>
+              <h3 style="margin-bottom: 4px;">No Incidents in Current Filter</h3>
+              <p style="font-size: 13px; color: var(--text-muted);">
+                All citizen sectors secure. Change filters or wait for incoming citizen alerts.
+              </p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = items.map(inc => renderIncidentCard(inc)).join('');
+      } catch (err) {
+        container.innerHTML = `<div style="grid-column:1/-1; color:var(--spider-red); text-align:center;">${err.message}</div>`;
+      }
+    }
+
+    function renderIncidentCard(inc) {
+      const id = inc._id || inc.id;
+      const heroId = inc.hero ? (inc.hero._id || inc.hero).toString() : (inc.hero_id ? inc.hero_id.toString() : null);
+      const isAssignedHero = activeHero && heroId && (heroId === activeHero.id || heroId === activeHero.userId);
+      const isReported = inc.status === 'Reported';
+      const isClaimed = inc.status === 'Claimed';
+      const isInProgress = inc.status === 'In Progress';
+      const isResolved = inc.status === 'Resolved';
+
+      let actionButtons = '';
+      if (isReported) {
+        actionButtons += `<button class="btn btn-primary btn-sm" onclick="claimMission('${id}')">🦸 Claim Mission</button>`;
+      } else if (isAssignedHero && isClaimed) {
+        actionButtons += `<button class="btn btn-blue btn-sm" onclick="advanceStatus('${id}', 'In Progress')">⚡ Start Response</button>`;
+      } else if (isAssignedHero && isInProgress) {
+        actionButtons += `<button class="btn btn-green btn-sm" onclick="promptResolve('${id}')">✅ Resolve Mission</button>`;
+      } else if (isResolved) {
+        actionButtons += `<span style="font-size: 12px; color: var(--green); font-weight:700;">✓ Resolved</span>`;
+      } else if (!isAssignedHero) {
+        actionButtons += `<span style="font-size: 12px; color: var(--text-muted);">Hero: ${inc.heroName || 'Assigned'}</span>`;
+      }
+
+      const stClass = (inc.status || 'Reported').replace(/\s+/g, '-');
+
+      return `
+        <div class="incident-card" id="card-${id}">
+          <div class="card-top">
+            <span class="card-title">${escapeHtml(inc.title)}</span>
+            <span class="severity-badge sev-${inc.severity}">Threat Lvl ${inc.severity}</span>
+          </div>
+
+          <div class="meta-row">
+            <span>📍 ${escapeHtml(inc.location)}</span>
+            <span>🏷️ ${escapeHtml(inc.category)}</span>
+            <span class="status-badge st-${stClass}">${inc.status}</span>
+          </div>
+
+          <div class="desc-box">
+            ${escapeHtml(inc.description)}
+          </div>
+
+          <div style="font-size: 11px; color: var(--text-muted); display:flex; justify-content:space-between;">
+            <span>Reported by: <b>${escapeHtml(inc.reporterName || 'Citizen')}</b></span>
+            <span>${new Date(inc.createdAt || inc.created_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-secondary btn-sm" onclick="toggleAuditHistory('${id}')">📜 Audit Trail</button>
+            ${actionButtons}
+          </div>
+
+          <div id="history-${id}" class="history-drawer">
+            <div style="color:var(--text-muted); text-align:center;">Loading audit trail...</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Hero Claim Mission
+    async function claimMission(incidentId) {
+      try {
+        const res = await fetch(`/api/incidents/${incidentId}/claim`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showToast(`Mission claimed! Moving to location.`, 'success');
+          loadCitywideIncidents();
+        } else {
+          showToast(data.error || 'Failed to claim mission.', 'error');
+        }
+      } catch (err) {
+        showToast('Network error claiming mission.', 'error');
+      }
+    }
+
+    // Advance Status
+    async function advanceStatus(incidentId, newStatus, notes = '') {
+      try {
+        const res = await fetch(`/api/incidents/${incidentId}/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ status: newStatus, notes })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showToast(`Incident status updated to '${newStatus}'!`, 'success');
+          loadCitywideIncidents();
+        } else {
+          showToast(data.error || 'Failed to update status.', 'error');
+        }
+      } catch (err) {
+        showToast('Network error updating status.', 'error');
+      }
+    }
+
+    function promptResolve(incidentId) {
+      const notes = prompt('Enter tactical resolution summary (e.g. "Suspects webbed, hostages safe"):', 'Crisis neutralized, zone stabilized.');
+      if (notes !== null) {
+        advanceStatus(incidentId, 'Resolved', notes);
+      }
+    }
+
+    // Toggle Audit History
+    async function toggleAuditHistory(incidentId) {
+      const drawer = document.getElementById(`history-${incidentId}`);
+      if (drawer.style.display === 'block') {
+        drawer.style.display = 'none';
+        return;
+      }
+      drawer.style.display = 'block';
+
+      try {
+        const res = await fetch(`/api/incidents/${incidentId}/history`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        const historyList = Array.isArray(data) ? data : (Array.isArray(data.history) ? data.history : []);
+
+        if (res.ok && historyList.length > 0) {
+          drawer.innerHTML = historyList.map(h => `
+            <div class="history-item">
+              <div style="display:flex; justify-content:space-between;">
+                <span><b>${h.previous_status || 'Reported'}</b> ➔ <b>${h.new_status}</b></span>
+                <span style="color:var(--text-muted); font-size:11px;">${new Date(h.changed_at).toLocaleTimeString()}</span>
+              </div>
+              <div style="font-size:11px; color:#a1aab7;">By: ${escapeHtml(h.changed_by_name || 'Responder')}</div>
+              ${h.notes ? `<div style="font-style:italic; color:#8b949e; margin-top:2px;">"${escapeHtml(h.notes)}"</div>` : ''}
+            </div>
+          `).join('');
+        } else {
+          drawer.innerHTML = '<div style="color:var(--text-muted);">No history transitions recorded.</div>';
+        }
+      } catch (err) {
+        drawer.innerHTML = `<div style="color:var(--spider-red);">Error loading history: ${err.message}</div>`;
+      }
+    }
+
+    // Sign out
+    async function handleSignOut() {
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+      } catch (e) {}
+      localStorage.removeItem('spider_token');
+      window.location.href = '/login';
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+  </script>
+</body>
+</html>
+
