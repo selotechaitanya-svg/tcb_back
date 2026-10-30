@@ -4,9 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spider-Sense | NYC Citizen Emergency Portal</title>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/glass.css">
   <style>
     :root {
       --bg: #090d16;
@@ -410,7 +414,7 @@
 
   <header>
     <a href="/" class="brand">
-      <div class="brand-icon">🕷️</div>
+      <img src="/logo.png" alt="Spider-Sense Emblem" class="brand-logo-img" width="30" height="38">
       <div class="brand-title">
         <span>SPIDER-SENSE</span>
         <span>NYC CITIZEN EMERGENCY DISPATCH NETWORK</span>
@@ -419,13 +423,13 @@
 
     <div class="header-actions">
       <div class="user-pill" id="user-display">
-        <span>👤 Guest</span>
+        <span><span class="status-dot"></span> Guest</span>
       </div>
       <a href="/login?method=otp" class="btn btn-secondary btn-sm" id="btn-login-nav">
-        ✉️ Sign In (OTP)
+        Sign In (OTP)
       </a>
       <a href="/login?method=password" class="btn btn-secondary btn-sm" id="btn-login-pass-nav">
-        🔑 Password
+        Password
       </a>
       <a href="/register" class="btn btn-primary btn-sm" id="btn-register-nav">
         Sign Up
@@ -439,15 +443,15 @@
   <main>
     <!-- Hero Notification Banner if Hero visits citizen portal -->
     <div id="hero-notice-banner">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <span style="font-size:24px;">🦸</span>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span class="hero-badge"><span class="status-dot hero"></span> HERO ACCESS</span>
         <div>
-          <b>Hero Profile Detected</b>
-          <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">You are currently signed in as an authorized NYC Hero.</p>
+          <b>Authorized Hero Clearance Detected</b>
+          <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">You are currently signed in as an active NYC Hero responder.</p>
         </div>
       </div>
       <a href="/admin" class="btn btn-primary">
-        Go to Hero Command Center (/admin) ➔
+        Hero Command Center →
       </a>
     </div>
 
@@ -461,13 +465,13 @@
       </div>
       <div style="display: flex; gap: 10px; flex-wrap: wrap;">
         <a href="/login?method=otp" class="btn btn-secondary">
-          ✉️ Sign In with OTP
+          Sign In with OTP
         </a>
         <a href="/login?method=password" class="btn btn-secondary">
-          🔑 Sign In with Password
+          Sign In with Password
         </a>
         <a href="/register" class="btn btn-primary">
-          📝 Register New Account
+          Register New Account
         </a>
       </div>
     </div>
@@ -475,7 +479,7 @@
     <!-- Citizen Report Form Card -->
     <div class="card" id="report-card">
       <h2 style="font-size: 18px; margin-bottom: 6px; display:flex; align-items:center; gap:8px;">
-        📢 Report Emergency / Incident to Heroes
+        Emergency Incident Dispatch
       </h2>
       <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
         Describe what problem or terror is happening in your society. Alerts are immediately dispatched to nearby heroes.
@@ -524,7 +528,7 @@
 
         <div style="display: flex; justify-content: flex-end;">
           <button type="submit" class="btn btn-primary" id="btn-submit-report">
-            🚀 Dispatch Emergency Alert
+            Dispatch Emergency Alert
           </button>
         </div>
       </form>
@@ -533,15 +537,15 @@
     <!-- My Reported Incidents Section -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
       <h3 style="font-size: 18px; font-weight: 700;">
-        📋 My Reported Incidents & Live Hero Tracking
+        My Reported Incidents & Live Hero Tracking
       </h3>
       <button class="btn btn-secondary btn-sm" onclick="loadMyIncidents()">
-        🔄 Refresh My Reports
+        Refresh My Reports
       </button>
     </div>
 
     <div id="incidents-container" class="incidents-grid">
-      <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--card-bg); border-radius: 12px; border: 1px dashed var(--border);">
+      <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--glass-surface); border-radius: 14px; border: 1px dashed var(--glass-border);">
         <p style="color: var(--text-muted); font-size: 14px;">Sign in to view and track your submitted emergency reports.</p>
       </div>
     </div>
@@ -561,7 +565,7 @@
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
       toast.className = `toast toast-${type}`;
-      toast.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '⚠️' : 'ℹ️'}</span> ${message}`;
+      toast.innerHTML = `<span class="toast-dot ${type}"></span> ${message}`;
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';
@@ -603,14 +607,14 @@
       const guestBanner = document.getElementById('guest-banner');
 
       if (currentUser) {
-        display.innerHTML = `<span>👤 <b>${escapeHtml(currentUser.name)}</b> (${currentUser.role})</span>`;
+        display.innerHTML = `<span><span class="status-dot ${currentUser.role === 'Hero' ? 'hero' : 'active'}"></span> <b>${escapeHtml(currentUser.name)}</b> <span style="color:var(--text-muted); font-size:11px;">(${currentUser.role})</span></span>`;
         if (loginNav) loginNav.style.display = 'none';
         if (loginPassNav) loginPassNav.style.display = 'none';
         if (regNav) regNav.style.display = 'none';
         if (logoutBtn) logoutBtn.style.display = 'inline-flex';
         if (guestBanner) guestBanner.style.display = 'none';
       } else {
-        display.innerHTML = `<span>👤 Guest</span>`;
+        display.innerHTML = `<span><span class="status-dot"></span> Guest</span>`;
         if (loginNav) loginNav.style.display = 'inline-flex';
         if (loginPassNav) loginPassNav.style.display = 'inline-flex';
         if (regNav) regNav.style.display = 'inline-flex';
@@ -660,7 +664,7 @@
         showToast('Network error submitting incident report.', 'error');
       } finally {
         btn.disabled = false;
-        btn.innerText = '🚀 Dispatch Emergency Alert';
+        btn.innerText = 'Dispatch Emergency Alert';
       }
     }
 
@@ -670,7 +674,7 @@
 
       if (!authToken) {
         container.innerHTML = `
-          <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--card-bg); border-radius: 12px; border: 1px dashed var(--border);">
+          <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--glass-surface); border-radius: 14px; border: 1px dashed var(--glass-border);">
             <p style="color: var(--text-muted); font-size: 14px;">Sign in to view and track your submitted emergency reports.</p>
           </div>
         `;
@@ -690,8 +694,8 @@
         const items = data.items || [];
         if (items.length === 0) {
           container.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--card-bg); border-radius: 12px; border: 1px dashed var(--border);">
-              <div style="font-size: 32px; margin-bottom: 8px;">🛡️</div>
+            <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--glass-surface); border-radius: 14px; border: 1px dashed var(--glass-border);">
+              <div style="width:44px; height:44px; border-radius:50%; background:rgba(233,69,245,0.12); border:1px solid rgba(233,69,245,0.25); display:inline-flex; align-items:center; justify-content:center; margin-bottom:12px;"><img src="/logo.png" width="22" height="28" style="opacity:0.85;"></div>
               <h4 style="margin-bottom: 4px;">No Incidents Reported Yet</h4>
               <p style="font-size: 13px; color: var(--text-muted);">
                 If there is a problem, gang terror, or emergency in your area, use the dispatch form above.
@@ -720,8 +724,8 @@
           </div>
 
           <div class="meta-row">
-            <span>📍 ${escapeHtml(inc.location)}</span>
-            <span>🏷️ ${escapeHtml(inc.category)}</span>
+            <span class="meta-tag">LOC: <b>${escapeHtml(inc.location)}</b></span>
+            <span class="meta-tag">CAT: <b>${escapeHtml(inc.category)}</b></span>
             <span class="status-badge st-${stClass}">${inc.status}</span>
           </div>
 
@@ -729,13 +733,13 @@
             ${escapeHtml(inc.description)}
           </div>
 
-          <div style="font-size: 11px; color: var(--text-muted); display:flex; justify-content:space-between; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+          <div style="font-size: 11px; color: var(--text-muted); display:flex; justify-content:space-between; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px;">
             <span>${heroText}</span>
             <span>${new Date(inc.createdAt || inc.created_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
           </div>
 
           <button class="btn btn-secondary btn-sm" onclick="toggleAuditHistory('${id}')" style="align-self:flex-end;">
-            📜 History Log
+            Audit History
           </button>
 
           <div id="history-${id}" class="history-drawer">
@@ -764,7 +768,7 @@
           drawer.innerHTML = historyList.map(h => `
             <div class="history-item">
               <div style="display:flex; justify-content:space-between;">
-                <span><b>${h.previous_status || 'Reported'}</b> ➔ <b>${h.new_status}</b></span>
+                <span><b>${h.previous_status || 'Reported'}</b> → <b>${h.new_status}</b></span>
                 <span style="color:var(--text-muted); font-size:11px;">${new Date(h.changed_at).toLocaleTimeString()}</span>
               </div>
               <div style="font-size:11px; color:#a1aab7;">By: ${escapeHtml(h.changed_by_name || 'System')}</div>

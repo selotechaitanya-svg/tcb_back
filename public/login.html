@@ -4,9 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign In | Spider-Sense Alert Network</title>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/glass.css">
   <style>
     :root {
       --bg: #090d16;
@@ -327,7 +331,7 @@
 <body>
 
   <div class="brand-header">
-    <div class="brand-logo">🕷️</div>
+    <img src="/logo.png" alt="Spider Logo" class="brand-logo-img" width="46" height="58">
     <div class="brand-title">SPIDER-<span>SENSE</span></div>
     <div class="brand-subtitle">New York City Emergency Alert & Hero Dispatch</div>
   </div>
@@ -336,10 +340,10 @@
     <!-- Immediate Tab Selector: OTP vs Password -->
     <div class="method-tabs">
       <button type="button" class="tab-btn active tab-otp" id="tab-btn-otp" onclick="switchTab('otp')">
-        ✉️ Sign in with OTP
+        One-Time Code (OTP)
       </button>
       <button type="button" class="tab-btn tab-pass" id="tab-btn-pass" onclick="switchTab('password')">
-        🔑 Sign in with Password
+        Password Access
       </button>
     </div>
 
@@ -347,7 +351,7 @@
     <div id="view-otp">
       <div class="form-title">Email OTP Sign In</div>
       <div class="form-desc">
-        Enter your email to receive a secure 6-digit one-time code via Resend or Gmail.
+        Enter your email to receive a secure 6-digit one-time verification code.
       </div>
 
       <!-- Step A: Enter Email & Request Code -->
@@ -359,7 +363,7 @@
           </div>
 
           <button type="submit" class="btn btn-primary" id="btn-request-code">
-            📩 Send 6-Digit Verification Code
+            Send Verification Code
           </button>
         </form>
       </div>
@@ -377,7 +381,7 @@
           </div>
 
           <button type="submit" class="btn btn-primary" id="btn-submit-verify">
-            Verify & Sign In ⚡
+            Verify & Sign In
           </button>
 
           <button type="button" class="btn btn-secondary" onclick="backToOtpEmail()">
@@ -406,7 +410,7 @@
         </div>
 
         <button type="submit" class="btn btn-blue" id="btn-pass-login">
-          Sign In with Password ➔
+          Sign In with Password
         </button>
       </form>
     </div>
@@ -427,7 +431,7 @@
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
       toast.className = `toast toast-${type}`;
-      toast.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '⚠️' : 'ℹ️'}</span> ${message}`;
+      toast.innerHTML = `<span class="toast-dot ${type}"></span> ${message}`;
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';
@@ -543,7 +547,7 @@
         showToast('Network error dispatching OTP.', 'error');
       } finally {
         btn.disabled = false;
-        btn.innerText = '📩 Send 6-Digit Verification Code';
+        btn.innerText = 'Send Verification Code';
       }
     }
 
@@ -581,7 +585,7 @@
         showToast('Verification failed. Please try again.', 'error');
       } finally {
         btn.disabled = false;
-        btn.innerText = 'Verify & Sign In ⚡';
+        btn.innerText = 'Verify & Sign In';
       }
     }
 
@@ -631,7 +635,7 @@
         showToast('Network error signing in with password.', 'error');
       } finally {
         btn.disabled = false;
-        btn.innerText = 'Sign In with Password ➔';
+        btn.innerText = 'Sign In with Password';
       }
     }
   </script>

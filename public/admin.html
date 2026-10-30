@@ -4,9 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hero Command Center | Spider-Sense Dispatch</title>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/glass.css">
   <style>
     :root {
       --bg: #070a12;
@@ -465,7 +469,7 @@
 
   <header>
     <a href="/admin" class="brand">
-      <div class="brand-icon">🕷️</div>
+      <img src="/logo.png" alt="Hero Command" class="brand-logo-img" width="30" height="38">
       <div class="brand-title">
         <span>HERO COMMAND CENTER</span>
         <span>NYC EMERGENCY RESPONSE NETWORK (/admin)</span>
@@ -474,10 +478,10 @@
 
     <div class="header-actions">
       <div class="hero-badge" id="hero-identity">
-        🦸 Authenticating Hero...
+        <span class="status-dot hero"></span> Authenticating Hero...
       </div>
       <a href="/" class="btn btn-secondary btn-sm">
-        🏙️ Citizen View
+        Citizen Portal
       </a>
       <button class="btn btn-secondary btn-sm" onclick="handleSignOut()">
         Sign Out
@@ -493,7 +497,7 @@
       </div>
       <div>
         <button class="btn btn-primary" onclick="loadCitywideIncidents()">
-          🔄 Refresh Dispatch
+          Refresh Dispatch
         </button>
       </div>
     </div>
@@ -548,13 +552,13 @@
   <!-- Access Denied Overlay for Non-Heroes -->
   <div id="denied-overlay">
     <div class="denied-card">
-      <div style="font-size: 48px; margin-bottom: 12px;">🔒</div>
+      <div style="width:52px; height:52px; border-radius:50%; background:rgba(222,68,59,0.15); border:1px solid rgba(222,68,59,0.35); display:inline-flex; align-items:center; justify-content:center; margin-bottom:14px;"><img src="/logo.png" width="26" height="32" style="opacity:0.9;"></div>
       <h2 style="margin-bottom: 8px; color: var(--spider-red);">Hero Authorization Required</h2>
       <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">
         The <code>/admin</code> command center is restricted strictly to verified superhero responders. Please sign in with an authorized Hero email or register as a Hero.
       </p>
       <a href="/login" class="btn btn-primary" style="display: inline-flex; justify-content: center; width: 100%;">
-        Sign In as Hero ➔
+        Sign In as Hero →
       </a>
       <a href="/" class="btn btn-secondary" style="display: inline-flex; justify-content: center; width: 100%; margin-top: 10px;">
         Go to Citizen Emergency Portal
@@ -576,7 +580,7 @@
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
       toast.className = `toast toast-${type}`;
-      toast.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '⚠️' : 'ℹ️'}</span> ${message}`;
+      toast.innerHTML = `<span class="toast-dot ${type}"></span> ${message}`;
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';
@@ -607,7 +611,7 @@
           }
 
           activeHero = data.user;
-          document.getElementById('hero-identity').innerHTML = `🦸 ${activeHero.name} (${activeHero.email})`;
+          document.getElementById('hero-identity').innerHTML = `<span class="status-dot hero"></span> ${escapeHtml(activeHero.name)} (${escapeHtml(activeHero.email)})`;
           document.getElementById('hero-welcome').innerText = `NYC Dispatch • Hero ${activeHero.name}`;
           loadCitywideIncidents();
         } else {
@@ -645,8 +649,8 @@
 
         if (items.length === 0) {
           container.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--card-bg); border-radius: 12px; border: 1px dashed var(--border);">
-              <div style="font-size: 36px; margin-bottom: 8px;">🛡️</div>
+            <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--glass-surface); border-radius: 14px; border: 1px dashed var(--glass-border);">
+              <div style="width:44px; height:44px; border-radius:50%; background:rgba(233,69,245,0.12); border:1px solid rgba(233,69,245,0.25); display:inline-flex; align-items:center; justify-content:center; margin-bottom:12px;"><img src="/logo.png" width="22" height="28" style="opacity:0.85;"></div>
               <h3 style="margin-bottom: 4px;">No Incidents in Current Filter</h3>
               <p style="font-size: 13px; color: var(--text-muted);">
                 All citizen sectors secure. Change filters or wait for incoming citizen alerts.
@@ -673,15 +677,15 @@
 
       let actionButtons = '';
       if (isReported) {
-        actionButtons += `<button class="btn btn-primary btn-sm" onclick="claimMission('${id}')">🦸 Claim Mission</button>`;
+        actionButtons += `<button class="btn btn-primary btn-sm" onclick="claimMission('${id}')">Claim Mission</button>`;
       } else if (isAssignedHero && isClaimed) {
-        actionButtons += `<button class="btn btn-blue btn-sm" onclick="advanceStatus('${id}', 'In Progress')">⚡ Start Response</button>`;
+        actionButtons += `<button class="btn btn-blue btn-sm" onclick="advanceStatus('${id}', 'In Progress')">Start Response</button>`;
       } else if (isAssignedHero && isInProgress) {
-        actionButtons += `<button class="btn btn-green btn-sm" onclick="promptResolve('${id}')">✅ Resolve Mission</button>`;
+        actionButtons += `<button class="btn btn-primary btn-sm" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%) !important;" onclick="promptResolve('${id}')">Resolve Mission</button>`;
       } else if (isResolved) {
-        actionButtons += `<span style="font-size: 12px; color: var(--green); font-weight:700;">✓ Resolved</span>`;
+        actionButtons += `<span style="font-size: 12px; color: var(--green); font-weight:700;">Resolved</span>`;
       } else if (!isAssignedHero) {
-        actionButtons += `<span style="font-size: 12px; color: var(--text-muted);">Hero: ${inc.heroName || 'Assigned'}</span>`;
+        actionButtons += `<span style="font-size: 12px; color: var(--text-muted);">Hero: ${escapeHtml(inc.heroName || 'Assigned')}</span>`;
       }
 
       const stClass = (inc.status || 'Reported').replace(/\s+/g, '-');
@@ -694,8 +698,8 @@
           </div>
 
           <div class="meta-row">
-            <span>📍 ${escapeHtml(inc.location)}</span>
-            <span>🏷️ ${escapeHtml(inc.category)}</span>
+            <span class="meta-tag">LOC: <b>${escapeHtml(inc.location)}</b></span>
+            <span class="meta-tag">CAT: <b>${escapeHtml(inc.category)}</b></span>
             <span class="status-badge st-${stClass}">${inc.status}</span>
           </div>
 
@@ -703,13 +707,13 @@
             ${escapeHtml(inc.description)}
           </div>
 
-          <div style="font-size: 11px; color: var(--text-muted); display:flex; justify-content:space-between;">
+          <div style="font-size: 11px; color: var(--text-muted); display:flex; justify-content:space-between; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px;">
             <span>Reported by: <b>${escapeHtml(inc.reporterName || 'Citizen')}</b></span>
             <span>${new Date(inc.createdAt || inc.created_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
           </div>
 
           <div class="card-actions">
-            <button class="btn btn-secondary btn-sm" onclick="toggleAuditHistory('${id}')">📜 Audit Trail</button>
+            <button class="btn btn-secondary btn-sm" onclick="toggleAuditHistory('${id}')">Audit Trail</button>
             ${actionButtons}
           </div>
 
@@ -791,7 +795,7 @@
           drawer.innerHTML = historyList.map(h => `
             <div class="history-item">
               <div style="display:flex; justify-content:space-between;">
-                <span><b>${h.previous_status || 'Reported'}</b> ➔ <b>${h.new_status}</b></span>
+                <span><b>${h.previous_status || 'Reported'}</b> → <b>${h.new_status}</b></span>
                 <span style="color:var(--text-muted); font-size:11px;">${new Date(h.changed_at).toLocaleTimeString()}</span>
               </div>
               <div style="font-size:11px; color:#a1aab7;">By: ${escapeHtml(h.changed_by_name || 'Responder')}</div>

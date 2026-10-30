@@ -4,9 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up | Spider-Sense Alert Network</title>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/glass.css">
   <style>
     :root {
       --bg: #090d16;
@@ -295,7 +299,7 @@
 <body>
 
   <div class="brand-header">
-    <div class="brand-logo">🕷️</div>
+    <img src="/logo.png" alt="Spider Logo" class="brand-logo-img" width="46" height="58">
     <div class="brand-title">SPIDER-<span>SENSE</span></div>
     <div class="brand-subtitle">Create Your New York Emergency Network Account</div>
   </div>
@@ -331,8 +335,8 @@
         <div class="form-group">
           <label for="reg-role">Role Designation *</label>
           <select id="reg-role" required>
-            <option value="Citizen" selected>🏙️ Citizen (Report emergencies & neighborhood crimes)</option>
-            <option value="Hero">🦸 Hero (First responder / superhero dispatch & incident resolution)</option>
+            <option value="Citizen" selected>Citizen (Report emergencies & neighborhood crimes)</option>
+            <option value="Hero">Hero (First responder / superhero dispatch & incident resolution)</option>
           </select>
         </div>
 
@@ -366,7 +370,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary" id="btn-finalize-reg">
-          Verify & Complete Registration 🚀
+          Verify & Complete Registration
         </button>
 
         <button type="button" class="btn btn-secondary" onclick="backToDetailsStage()">
@@ -394,7 +398,7 @@
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
       toast.className = `toast toast-${type}`;
-      toast.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '⚠️' : 'ℹ️'}</span> ${message}`;
+      toast.innerHTML = `<span class="toast-dot ${type}"></span> ${message}`;
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';
@@ -529,7 +533,7 @@
         showToast('Network error during registration.', 'error');
       } finally {
         btn.disabled = false;
-        btn.innerText = 'Verify & Complete Registration 🚀';
+        btn.innerText = 'Verify & Complete Registration';
       }
     }
   </script>
