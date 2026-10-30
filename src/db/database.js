@@ -26,13 +26,24 @@ class DatabaseManager {
    */
   init() {
     if (this.dbPath !== ':memory:') {
-      const dir = path.dirname(path.resolve(this.dbPath));
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
+      try {
+        const dir = path.dirname(path.resolve(this.dbPath));
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+        }
+      } catch (err) {
+        console.warn('[SQLite] Readonly filesystem detected, switching to in-memory mode:', err.message);
+        this.dbPath = ':memory:';
       }
     }
 
-    this.db = new DatabaseSync(this.dbPath);
+    try {
+      this.db = new DatabaseSync(this.dbPath);
+    } catch (err) {
+      console.warn('[SQLite] Initialization failed, falling back to :memory:', err.message);
+      this.dbPath = ':memory:';
+      this.db = new DatabaseSync(':memory:');
+    }
 
     // Enforce relational integrity and configure timeouts
     this.db.exec('PRAGMA foreign_keys = ON;');
@@ -216,7 +227,7 @@ function resolveDbPath() {
   if (process.env.DATABASE_PATH) {
     return process.env.DATABASE_PATH;
   }
-  if (process.env.NODE_ENV === 'test') {
+  if (process.env.NODE_ENV === 'test' || process.env.VERCEL) {
     return ':memory:';
   }
   return path.join(__dirname, '../../data/spidersense.db');

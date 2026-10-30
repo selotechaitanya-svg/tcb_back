@@ -36,19 +36,19 @@ app.get('/health', (req, res) => {
 });
 
 // Clean frontend page routes
-app.get('/', (req, res) => {
+app.get(['/', '/index', '/index.html'], (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });
 
-app.get('/admin', (req, res) => {
+app.get(['/admin', '/admin.html'], (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/admin.html'));
 });
 
-app.get('/login', (req, res) => {
+app.get(['/login', '/login.html'], (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/login.html'));
 });
 
-app.get('/register', (req, res) => {
+app.get(['/register', '/register.html'], (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/register.html'));
 });
 

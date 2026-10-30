@@ -5,7 +5,7 @@ require('dotenv').config();
 const config = {
   port: parseInt(process.env.PORT || '3000', 10),
   nodeEnv: process.env.NODE_ENV || 'development',
-  mongoUri: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/spider-sense',
+  mongoUri: process.env.MONGODB_URI || 'mongodb+srv://savitaselote2_db_user:6mfCvZEn9Q6VwO54@gdg.hkjz12r.mongodb.net/spider-sense?retryWrites=true&w=majority&appName=GDG',
   jwtSecret: process.env.JWT_SECRET || 'spider-sense-secret-key-7days-2026-superhero',
   jwtExpiresIn: process.env.JWT_ACCESS_EXPIRE || '7d',
   bcryptSaltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS || '10', 10),
