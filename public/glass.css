@@ -1,78 +1,91 @@
 /* ==========================================================================
-   Spider-Sense Glassmorphism & Visual Identity System
-   Tailored to harmoniously float above the FloatingLines WebGL background.
-   Replaces AI-slop / muddy slate colors with deep translucent crystal glass,
-   neon violet & crimson specular borders, and zero cartoon emojis.
+   Spider-Sense White Glassmorphism & Visual Identity System
+   Tailored to float with luminous clarity above the FloatingLines WebGL background.
+   Crisp frosted white glass bars, high specular rims, and bold Spider-Red emblem.
    ========================================================================== */
 
 :root {
   --bg: #07090e;
-  --glass-bar: rgba(12, 9, 22, 0.70);
-  --glass-surface: rgba(15, 11, 26, 0.54);
-  --glass-surface-hover: rgba(24, 18, 40, 0.66);
-  --glass-surface-card: rgba(14, 10, 24, 0.58);
-  --glass-input: rgba(9, 6, 17, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-border-hover: rgba(233, 69, 245, 0.32);
-  --glass-border-focus: rgba(233, 69, 245, 0.70);
-  --glass-specular: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 36px -4px rgba(0, 0, 0, 0.55);
-  --glass-blur: blur(20px) saturate(190%);
-  --glass-blur-sm: blur(12px) saturate(180%);
+
+  /* Frosted White Glass Bars & Surfaces */
+  --white-glass-bar: rgba(255, 255, 255, 0.08);
+  --white-glass-bar-border: rgba(255, 255, 255, 0.24);
+  --white-glass-surface: rgba(255, 255, 255, 0.06);
+  --white-glass-surface-hover: rgba(255, 255, 255, 0.10);
+  --white-glass-card: rgba(255, 255, 255, 0.07);
+  --white-glass-border: rgba(255, 255, 255, 0.18);
+  --white-glass-border-hover: rgba(255, 255, 255, 0.38);
+  --white-glass-specular: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 12px 36px -4px rgba(0, 0, 0, 0.55);
+  --white-glass-blur: blur(28px) saturate(210%);
+  --white-glass-blur-sm: blur(16px) saturate(190%);
 
   --neon-magenta: #e945f5;
-  --neon-magenta-glow: rgba(233, 69, 245, 0.40);
+  --neon-magenta-glow: rgba(233, 69, 245, 0.45);
   --spider-red: #DE443B;
-  --spider-red-glow: rgba(222, 68, 59, 0.45);
+  --spider-red-hover: #b82d25;
+  --spider-red-glow: rgba(222, 68, 59, 0.55);
   --hero-blue: #006BB4;
+  --hero-blue-hover: #00548f;
   --hero-blue-glow: rgba(0, 107, 180, 0.45);
   --hero-violet: #8b5cf6;
-  --hero-violet-glow: rgba(139, 92, 246, 0.40);
+  --hero-violet-glow: rgba(139, 92, 246, 0.45);
   --green: #10b981;
   --gold: #f59e0b;
-  --purple: #a855f7;
 
-  --text: #f8fafc;
-  --text-muted: #94a3b8;
-  --text-dim: #64748b;
+  --text: #ffffff;
+  --text-muted: #cbd5e1;
+  --text-dim: #94a3b8;
 
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-display: 'Space Grotesk', -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-/* Glass Header & Floating Navigation */
+/* ─── White Glass Header & Navigation Bar ─────────────────────────────── */
 header {
-  background: var(--glass-bar) !important;
-  border-bottom: 1px solid var(--glass-border) !important;
-  backdrop-filter: var(--glass-blur) !important;
-  -webkit-backdrop-filter: var(--glass-blur) !important;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  background: var(--white-glass-bar) !important;
+  border-bottom: 1px solid var(--white-glass-bar-border) !important;
+  backdrop-filter: var(--white-glass-blur) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
 }
 
-/* Glassmorphism Logo */
+/* ─── Highly Visible Spider Logo ────────────────────────────────────────── */
 .brand-logo-img {
-  width: 32px;
-  height: 40px;
+  width: 36px;
+  height: 46px;
   object-fit: contain;
-  filter: drop-shadow(0 0 10px var(--neon-magenta-glow)) drop-shadow(0 0 2px rgba(255, 255, 255, 0.85));
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), filter 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   display: inline-block;
   vertical-align: middle;
+  filter: drop-shadow(0 0 10px rgba(222, 68, 59, 0.75)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.95));
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
 }
 
-.brand:hover .brand-logo-img,
-.brand-header:hover .brand-logo-img {
-  transform: scale(1.08) translateY(-1px);
-  filter: drop-shadow(0 0 16px var(--neon-magenta)) drop-shadow(0 0 4px #ffffff);
+.brand:hover .brand-logo-img {
+  transform: scale(1.10) translateY(-1px);
+  filter: drop-shadow(0 0 18px rgba(222, 68, 59, 0.95)) drop-shadow(0 0 6px #ffffff);
 }
 
-/* Glass User Identity Pill */
+.brand-header .brand-logo-img {
+  width: 64px;
+  height: 80px;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 18px rgba(222, 68, 59, 0.85)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.95));
+}
+
+.brand-title span:first-child {
+  color: var(--spider-red) !important;
+  text-shadow: 0 0 16px rgba(222, 68, 59, 0.5);
+}
+
+/* ─── White Glass User Identity Pill & Badges ──────────────────────────── */
 .user-pill, .hero-badge {
-  background: rgba(18, 13, 30, 0.60) !important;
-  border: 1px solid var(--glass-border) !important;
-  backdrop-filter: var(--glass-blur-sm) !important;
-  -webkit-backdrop-filter: var(--glass-blur-sm) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+  border: 1px solid rgba(255, 255, 255, 0.26) !important;
+  backdrop-filter: var(--white-glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur-sm) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.30) !important;
+  color: #ffffff !important;
 }
 
 .status-dot {
@@ -85,132 +98,151 @@ header {
 
 .status-dot.active {
   background: var(--green);
-  box-shadow: 0 0 8px var(--green);
+  box-shadow: 0 0 10px var(--green);
 }
 
 .status-dot.hero {
-  background: var(--neon-magenta);
-  box-shadow: 0 0 8px var(--neon-magenta);
+  background: var(--spider-red);
+  box-shadow: 0 0 12px var(--spider-red);
 }
 
-/* Glass Cards & Containers */
-.card, .auth-card, #guest-banner, #hero-notice-banner, .filter-bar {
-  background: var(--glass-surface-card) !important;
-  border: 1px solid var(--glass-border) !important;
-  backdrop-filter: var(--glass-blur) !important;
-  -webkit-backdrop-filter: var(--glass-blur) !important;
-  box-shadow: var(--glass-specular) !important;
+/* ─── White Glass Secondary Buttons ────────────────────────────────────── */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  backdrop-filter: var(--white-glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur-sm) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.30) !important;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 0 16px rgba(255, 255, 255, 0.25) !important;
+  transform: translateY(-1.5px);
+}
+
+/* ─── White Glass Banners & Filter Bars ────────────────────────────────── */
+#hero-notice-banner, #guest-banner, .controls-bar, .filter-bar, .hero-banner {
+  background: var(--white-glass-bar) !important;
+  border: 1px solid var(--white-glass-bar-border) !important;
+  backdrop-filter: var(--white-glass-blur) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur) !important;
+  box-shadow: var(--white-glass-specular) !important;
   border-radius: 18px !important;
+  transition: all 0.24s ease;
+}
+
+#hero-notice-banner:hover, #guest-banner:hover, .controls-bar:hover, .hero-banner:hover {
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 16px 44px 0 rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ─── White Glass Cards & Containers ───────────────────────────────────── */
+.card, .auth-card {
+  background: var(--white-glass-card) !important;
+  border: 1px solid var(--white-glass-border) !important;
+  backdrop-filter: var(--white-glass-blur) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur) !important;
+  box-shadow: var(--white-glass-specular) !important;
+  border-radius: 20px !important;
   transition: border-color 0.24s ease, box-shadow 0.24s ease;
 }
 
-.card:hover, #guest-banner:hover, #hero-notice-banner:hover {
-  border-color: rgba(255, 255, 255, 0.14) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 16px 44px -8px rgba(0, 0, 0, 0.6) !important;
+.card:hover, .auth-card:hover {
+  border-color: var(--white-glass-border-hover) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 20px 50px -8px rgba(0, 0, 0, 0.65) !important;
 }
 
-/* Incident Glass Cards */
+/* ─── White Glass Incident Cards ───────────────────────────────────────── */
 .incident-card {
-  background: var(--glass-surface) !important;
-  border: 1px solid var(--glass-border) !important;
-  backdrop-filter: var(--glass-blur) !important;
-  -webkit-backdrop-filter: var(--glass-blur) !important;
-  box-shadow: var(--glass-specular) !important;
-  border-radius: 14px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  backdrop-filter: var(--white-glass-blur) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+  border-radius: 16px !important;
   transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .incident-card:hover {
-  border-color: var(--glass-border-hover) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 18px 46px -6px rgba(0, 0, 0, 0.65), 0 0 20px rgba(233, 69, 245, 0.14) !important;
+  background: rgba(255, 255, 255, 0.09) !important;
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38), 0 18px 46px -6px rgba(0, 0, 0, 0.65), 0 0 24px rgba(255, 255, 255, 0.15) !important;
   transform: translateY(-2px);
 }
 
-/* Glass Inputs & Textareas */
-input, select, textarea {
-  background: var(--glass-input) !important;
-  border: 1px solid var(--glass-border) !important;
-  backdrop-filter: var(--glass-blur-sm) !important;
-  -webkit-backdrop-filter: var(--glass-blur-sm) !important;
-  color: var(--text) !important;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35) !important;
-}
-
-input:focus, select:focus, textarea:focus {
-  border-color: var(--glass-border-focus) !important;
-  box-shadow: 0 0 0 3px rgba(233, 69, 245, 0.18), inset 0 1px 2px rgba(0, 0, 0, 0.4) !important;
-}
-
-/* Method Tabs in Auth */
+/* ─── Method Selector Tabs in Auth ─────────────────────────────────────── */
 .method-tabs {
-  background: rgba(10, 7, 18, 0.72) !important;
-  border: 1px solid var(--glass-border) !important;
-  backdrop-filter: var(--glass-blur-sm) !important;
-  -webkit-backdrop-filter: var(--glass-blur-sm) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  backdrop-filter: var(--white-glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur-sm) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
+  border-radius: 12px !important;
 }
 
 .tab-btn.active {
-  background: rgba(233, 69, 245, 0.16) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(233, 69, 245, 0.45) !important;
-  box-shadow: 0 2px 10px rgba(233, 69, 245, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.40) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
 }
 
-/* Glass Secondary Buttons */
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  backdrop-filter: var(--glass-blur-sm) !important;
-  -webkit-backdrop-filter: var(--glass-blur-sm) !important;
-  color: #cbd5e1 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.10) !important;
-  border-color: rgba(233, 69, 245, 0.35) !important;
+/* ─── Inputs & Textareas ───────────────────────────────────────────────── */
+input, select, textarea {
+  background: rgba(10, 8, 18, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  backdrop-filter: var(--white-glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur-sm) !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 0 12px rgba(233, 69, 245, 0.15) !important;
-  transform: translateY(-1.5px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* Primary Alert Action Button */
+input:focus, select:focus, textarea:focus {
+  border-color: rgba(222, 68, 59, 0.8) !important;
+  box-shadow: 0 0 0 3px rgba(222, 68, 59, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ─── Primary Action Buttons ───────────────────────────────────────────── */
 .btn-primary {
   background: linear-gradient(135deg, #DE443B 0%, #a8201a 100%) !important;
-  border: 1px solid rgba(255, 120, 110, 0.35) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 4px 18px var(--spider-red-glow) !important;
+  border: 1px solid rgba(255, 120, 110, 0.45) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 18px var(--spider-red-glow) !important;
   color: #ffffff !important;
 }
 
 .btn-primary:hover {
   background: linear-gradient(135deg, #e84c43 0%, #b82721 100%) !important;
-  border-color: rgba(255, 160, 150, 0.5) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38), 0 6px 24px rgba(222, 68, 59, 0.6) !important;
+  border-color: rgba(255, 170, 160, 0.6) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 6px 24px rgba(222, 68, 59, 0.7) !important;
   transform: translateY(-1.5px);
 }
 
-/* Neon Violet / Hero Blue Action Button */
+/* ─── Blue / Indigo Action Buttons ─────────────────────────────────────── */
 .btn-blue {
-  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%) !important;
-  border: 1px solid rgba(196, 181, 253, 0.35) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 4px 18px rgba(124, 58, 237, 0.38) !important;
+  background: linear-gradient(135deg, #1688d9 0%, #006bb4 100%) !important;
+  border: 1px solid rgba(160, 220, 255, 0.45) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 18px var(--hero-blue-glow) !important;
   color: #ffffff !important;
 }
 
 .btn-blue:hover {
-  background: linear-gradient(135deg, #8b5cf6 0%, #5b50ed 100%) !important;
-  border-color: rgba(216, 205, 255, 0.5) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38), 0 6px 24px rgba(139, 92, 246, 0.55) !important;
+  background: linear-gradient(135deg, #2499ed 0%, #007bc7 100%) !important;
+  border-color: rgba(190, 235, 255, 0.6) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 6px 24px rgba(0, 107, 180, 0.65) !important;
   transform: translateY(-1.5px);
 }
 
-/* Glass Minimalist Toast */
+/* ─── Glass Minimalist Toast ───────────────────────────────────────────── */
 .toast {
-  background: rgba(14, 10, 24, 0.88) !important;
-  border: 1px solid var(--glass-border) !important;
-  backdrop-filter: var(--glass-blur) !important;
-  -webkit-backdrop-filter: var(--glass-blur) !important;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  background: rgba(15, 12, 26, 0.90) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  backdrop-filter: var(--white-glass-blur) !important;
+  -webkit-backdrop-filter: var(--white-glass-blur) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
 }
 
 .toast-dot {
@@ -222,9 +254,8 @@ input:focus, select:focus, textarea:focus {
 
 .toast-dot.success { background: var(--green); box-shadow: 0 0 10px var(--green); }
 .toast-dot.error { background: var(--spider-red); box-shadow: 0 0 10px var(--spider-red); }
-.toast-dot.info { background: var(--neon-magenta); box-shadow: 0 0 10px var(--neon-magenta); }
+.toast-dot.info { background: #38bdf8; box-shadow: 0 0 10px #38bdf8; }
 
-/* Clean Meta Labels */
 .meta-tag {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -234,6 +265,6 @@ input:focus, select:focus, textarea:focus {
 }
 
 .meta-tag b {
-  color: var(--text);
-  font-weight: 600;
+  color: #ffffff;
+  font-weight: 700;
 }
