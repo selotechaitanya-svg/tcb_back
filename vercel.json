@@ -28,11 +28,11 @@
     },
     {
       "source": "/health",
-      "destination": "/api/index.js"
+      "destination": "/api"
     },
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.js"
+      "destination": "/api"
     },
     {
       "source": "/",

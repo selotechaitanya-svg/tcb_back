@@ -4,10 +4,12 @@ const express = require('express');
 const path = require('node:path');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/authRoutes');
 const incidentRoutes = require('./routes/incidentRoutes');
 const errorHandler = require('./middleware/errorHandler');
+const { connectDB } = require('./db/mongodb');
 
 const app = express();
 
@@ -50,6 +52,20 @@ app.get(['/login', '/login.html'], (req, res) => {
 
 app.get(['/register', '/register.html'], (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/register.html'));
+});
+
+// Ensure MongoDB is connected for API requests (skip during automated tests)
+app.use('/api', async (req, res, next) => {
+  if (process.env.NODE_ENV !== 'test') {
+    try {
+      if (mongoose.connection && mongoose.connection.readyState !== 1) {
+        await connectDB();
+      }
+    } catch (err) {
+      console.warn('[MongoDB Middleware] Notice:', err.message);
+    }
+  }
+  next();
 });
 
 // Domain API routes
