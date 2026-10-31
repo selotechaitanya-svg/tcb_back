@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#05070b">
   <title>Sign Up | Spider-Sense Alert Network</title>
-  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="icon" type="image/png" sizes="128x128" href="/favicon.png">
   <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/logo.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -303,7 +304,7 @@
     <div class="brand-logo-frame-large">
       <img src="/logo.png" alt="Spider Logo" class="brand-logo-img" width="50" height="60">
     </div>
-    <div class="brand-title">SPIDER-<span>SENSE</span></div>
+    <div class="brand-title">SPIDER-<em class="brand-accent">SENSE</em></div>
     <div class="brand-subtitle">Create Your New York Emergency Network Account</div>
   </div>
 
@@ -401,7 +402,12 @@
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
       toast.className = `toast toast-${type}`;
-      toast.innerHTML = `<span class="toast-dot ${type}"></span> ${message}`;
+      toast.setAttribute('role', 'status');
+      const dot = document.createElement('span');
+      dot.className = `toast-dot ${type}`;
+      const text = document.createElement('span');
+      text.textContent = message;
+      toast.append(dot, text);
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';

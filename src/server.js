@@ -18,8 +18,8 @@ async function startServer() {
   });
 
   // Connect to MongoDB asynchronously with resilient retry
-  connectDB().then(() => {
-    console.log('[Database] MongoDB connection established successfully.');
+  connectDB().then((connection) => {
+    if (connection) console.log('[Database] MongoDB connection established successfully.');
   }).catch((err) => {
     console.warn('[Database] MongoDB connection in progress or retrying in background:', err.message);
   });

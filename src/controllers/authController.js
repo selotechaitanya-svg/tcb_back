@@ -158,7 +158,7 @@ const authController = {
       const otpHash = hashOtp(cleanEmail, rawOtp);
       const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-      await Otp.create({
+      const otpRecord = await Otp.create({
         email: cleanEmail,
         otpHash,
         attempts: 0,

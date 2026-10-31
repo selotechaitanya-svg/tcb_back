@@ -38,7 +38,8 @@
 
   const siteMotion = {
     refresh: function () {},
-    panel: function () {}
+    panel: function () {},
+    lockScroll: function () {}
   };
   window.SiteMotion = siteMotion;
 
@@ -88,14 +89,27 @@
       if (brandHeader) {
         intro.from(
           brandHeader,
-          { y: 22, autoAlpha: 0, filter: 'blur(8px)', duration: 0.85, clearProps: 'all' },
+          {
+            y: 22,
+            autoAlpha: 0,
+            filter: 'blur(8px)',
+            duration: 0.85,
+            clearProps: 'transform,opacity,visibility,filter'
+          },
           0
         );
       }
       if (authCard) {
         intro.from(
           authCard,
-          { y: 34, autoAlpha: 0, scale: 0.985, filter: 'blur(10px)', duration: 1, clearProps: 'all' },
+          {
+            y: 34,
+            autoAlpha: 0,
+            scale: 0.985,
+            filter: 'blur(10px)',
+            duration: 1,
+            clearProps: 'transform,opacity,visibility,filter'
+          },
           0.1
         );
       }
@@ -108,19 +122,35 @@
         : [document.getElementById('report-card') || document.querySelector('.card')].filter(isVisible);
 
       if (header) {
-        intro.from(header, { y: -26, autoAlpha: 0, duration: 0.9, clearProps: 'all' }, 0);
+        intro.from(
+          header,
+          { y: -26, autoAlpha: 0, duration: 0.9, clearProps: 'transform,opacity,visibility' },
+          0
+        );
       }
       if (brandMarks.length) {
         intro.from(
           brandMarks,
-          { y: 10, autoAlpha: 0, duration: 0.55, stagger: 0.07, clearProps: 'all' },
+          {
+            y: 10,
+            autoAlpha: 0,
+            duration: 0.55,
+            stagger: 0.07,
+            clearProps: 'transform,opacity,visibility'
+          },
           0.16
         );
       }
       if (isVisible(guestBanner)) {
         intro.from(
           guestBanner,
-          { y: 26, autoAlpha: 0, filter: 'blur(8px)', duration: 0.9, clearProps: 'all' },
+          {
+            y: 26,
+            autoAlpha: 0,
+            filter: 'blur(8px)',
+            duration: 0.9,
+            clearProps: 'transform,opacity,visibility,filter'
+          },
           0.12
         );
       }
@@ -133,7 +163,7 @@
             filter: 'blur(10px)',
             duration: 1,
             stagger: 0.1,
-            clearProps: 'all'
+            clearProps: 'transform,opacity,visibility,filter'
           },
           0.24
         );
@@ -147,7 +177,7 @@
         autoAlpha: 0,
         duration: 0.8,
         ease: 'power2.out',
-        clearProps: 'all',
+        clearProps: 'transform,opacity,visibility,filter',
         scrollTrigger: {
           trigger: element,
           start: 'top 90%',
@@ -223,6 +253,12 @@
       if (lenisInstance) lenisInstance.resize();
       revealCards();
       ScrollTrigger.refresh();
+    };
+
+    siteMotion.lockScroll = locked => {
+      if (!lenisInstance) return;
+      if (locked) lenisInstance.stop();
+      else lenisInstance.start();
     };
 
     siteMotion.panel = element => {

@@ -6,6 +6,11 @@ const config = require('../config/config');
 let isConnecting = false;
 
 const connectDB = async () => {
+  if (!config.mongoUri) {
+    console.warn('[MongoDB] MONGODB_URI is not configured; skipping database connection.');
+    return null;
+  }
+
   if (mongoose.connection && mongoose.connection.readyState === 1) {
     return mongoose.connection;
   }

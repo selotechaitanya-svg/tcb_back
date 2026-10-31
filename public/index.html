@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#05070b">
   <title>Spider-Sense | NYC Citizen Emergency Portal</title>
-  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="icon" type="image/png" sizes="128x128" href="/favicon.png">
   <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/logo.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -408,7 +409,7 @@
         <img src="/logo.png" alt="Spider-Sense Emblem" class="brand-logo-img" width="28" height="36">
       </div>
       <div class="brand-title">
-        <span>SPIDER-SENSE</span>
+        <span>SPIDER-<em class="brand-accent">SENSE</em></span>
         <span>NYC CITIZEN EMERGENCY DISPATCH NETWORK</span>
       </div>
     </a>
@@ -527,7 +528,7 @@
     </div>
 
     <!-- My Reported Incidents Section -->
-    <div data-reveal style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <div class="section-heading" data-reveal>
       <h3 style="font-size: 18px; font-weight: 700;">
         My Reported Incidents & Live Hero Tracking
       </h3>
@@ -557,7 +558,12 @@
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
       toast.className = `toast toast-${type}`;
-      toast.innerHTML = `<span class="toast-dot ${type}"></span> ${message}`;
+      toast.setAttribute('role', 'status');
+      const dot = document.createElement('span');
+      dot.className = `toast-dot ${type}`;
+      const text = document.createElement('span');
+      text.textContent = message;
+      toast.append(dot, text);
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';
@@ -576,10 +582,6 @@
           if (res.ok && data.user) {
             currentUser = data.user;
             updateUserUI();
-
-            if (currentUser.isHero || currentUser.role === 'Hero') {
-              document.getElementById('hero-notice-banner').style.display = 'flex';
-            }
             loadMyIncidents();
           } else {
             handleSignOut(false);
@@ -597,14 +599,17 @@
       const regNav = document.getElementById('btn-register-nav');
       const logoutBtn = document.getElementById('btn-logout');
       const guestBanner = document.getElementById('guest-banner');
+      const heroNotice = document.getElementById('hero-notice-banner');
+      const isHero = currentUser && (currentUser.isHero || currentUser.role === 'Hero');
 
       if (currentUser) {
-        display.innerHTML = `<span><span class="status-dot ${currentUser.role === 'Hero' ? 'hero' : 'active'}"></span> <b>${escapeHtml(currentUser.name)}</b> <span style="color:var(--text-muted); font-size:11px;">(${currentUser.role})</span></span>`;
+        display.innerHTML = `<span><span class="status-dot ${currentUser.role === 'Hero' ? 'hero' : 'active'}"></span> <b>${escapeHtml(currentUser.name)}</b> <span style="color:var(--text-muted); font-size:11px;">(${escapeHtml(currentUser.role)})</span></span>`;
         if (loginNav) loginNav.style.display = 'none';
         if (loginPassNav) loginPassNav.style.display = 'none';
         if (regNav) regNav.style.display = 'none';
         if (logoutBtn) logoutBtn.style.display = 'inline-flex';
         if (guestBanner) guestBanner.style.display = 'none';
+        if (heroNotice) heroNotice.style.display = isHero ? 'flex' : 'none';
       } else {
         display.innerHTML = `<span><span class="status-dot"></span> Guest</span>`;
         if (loginNav) loginNav.style.display = 'inline-flex';
@@ -612,6 +617,7 @@
         if (regNav) regNav.style.display = 'inline-flex';
         if (logoutBtn) logoutBtn.style.display = 'none';
         if (guestBanner) guestBanner.style.display = 'flex';
+        if (heroNotice) heroNotice.style.display = 'none';
       }
 
       if (window.SiteMotion) window.SiteMotion.refresh();
@@ -689,20 +695,21 @@
         if (items.length === 0) {
           container.innerHTML = `
             <div class="empty-state">
-              <div style="width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.20); display:inline-flex; align-items:center; justify-content:center; margin-bottom:12px;"><img src="/logo.png" width="22" height="28" style="opacity:0.85;"></div>
+              <div style="width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.20); display:inline-flex; align-items:center; justify-content:center; margin-bottom:12px;"><img src="/spider-red.png" alt="" width="22" height="28" style="opacity:0.95;"></div>
               <h4 style="margin-bottom: 4px;">No Incidents Reported Yet</h4>
               <p style="font-size: 13px; color: var(--text-muted);">
                 If there is a problem, gang terror, or emergency in your area, use the dispatch form above.
               </p>
             </div>
           `;
+          if (window.SiteMotion) window.SiteMotion.refresh();
           return;
         }
 
         container.innerHTML = items.map(inc => renderIncidentCard(inc)).join('');
         if (window.SiteMotion) window.SiteMotion.refresh();
       } catch (err) {
-        container.innerHTML = `<div style="grid-column:1/-1; color:var(--spider-red); text-align:center;">${err.message}</div>`;
+        container.innerHTML = `<div style="grid-column:1/-1; color:var(--spider-red); text-align:center;">${escapeHtml(err.message)}</div>`;
       }
     }
 
@@ -721,7 +728,7 @@
           <div class="meta-row">
             <span class="meta-tag">LOC: <b>${escapeHtml(inc.location)}</b></span>
             <span class="meta-tag">CAT: <b>${escapeHtml(inc.category)}</b></span>
-            <span class="status-badge st-${stClass}">${inc.status}</span>
+            <span class="status-badge st-${escapeHtml(stClass)}">${escapeHtml(inc.status)}</span>
           </div>
 
           <div class="desc-box">
@@ -774,7 +781,7 @@
           drawer.innerHTML = '<div style="color:var(--text-muted);">No history recorded yet.</div>';
         }
       } catch (err) {
-        drawer.innerHTML = `<div style="color:var(--spider-red);">Error loading history: ${err.message}</div>`;
+        drawer.innerHTML = `<div style="color:var(--spider-red);">Error loading history: ${escapeHtml(err.message)}</div>`;
       }
     }
 
